@@ -1,0 +1,22 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "x64\\Debug\\glm.cppm.obj",
+            "outputs": [
+                "D:\\littlecode\\OpenglProjects\\basegl\\gl\\x64\\Debug\\vc143.pdb",
+                "x64\\Debug\\",
+                "D:\\littlecode\\OpenglProjects\\basegl\\gl\\x64\\Debug\\glm.cppm.ifc"
+            ],
+            "provides": [
+                {
+                    "logical-name": "glm",
+                    "source-path": "d:\\littlecode\\openglprojects\\basegl\\gl\\src\\vendor\\glm\\glm.cppm",
+                    "is-interface": true
+                }
+            ],
+            "requires": []
+        }
+    ]
+}

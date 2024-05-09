@@ -1,0 +1,28 @@
+﻿  IndexBuffer.cpp
+  main.cpp
+  Renderer.cpp
+  Shader.cpp
+  test.cpp
+  glm.cpp
+  glm.cppm
+D:\littlecode\OpenglProjects\basegl\gl\src\vendor\glm\glm.cppm(1,7): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+D:\littlecode\OpenglProjects\basegl\gl\src\vendor\glm\glm.cppm(10,1): error C3378: 只可从模块接口单元中导出声明
+D:\littlecode\OpenglProjects\basegl\gl\src\vendor\glm\glm.cppm(10,18): error C4430: 缺少类型说明符 - 假定为 int。注意: C++ 不支持默认 int
+D:\littlecode\OpenglProjects\basegl\gl\src\vendor\glm\glm.cppm(10,8): error C2086: “int module”: 重定义
+D:\littlecode\OpenglProjects\basegl\gl\src\vendor\glm\glm.cppm(1,1): message : 参见“module”的声明
+D:\littlecode\OpenglProjects\basegl\gl\src\vendor\glm\glm.cppm(10,15): error C2146: 语法错误: 缺少“;”(在标识符“glm”的前面)
+D:\littlecode\OpenglProjects\basegl\gl\src\vendor\glm\glm.cppm(12,1): error C3378: 只可从模块接口单元中导出声明
+D:\littlecode\OpenglProjects\basegl\gl\src\vendor\glm\glm.cppm(2672,1): error C3378: 只可从模块接口单元中导出声明
+  imgui.cpp
+  imgui_demo.cpp
+  imgui_draw.cpp
+  imgui_impl_glfw.cpp
+  imgui_impl_opengl3.cpp
+  imgui_tables.cpp
+  imgui_widgets.cpp
+  stb_image.cpp
+  VertexArray.cpp
+  VertexBuffer.cpp
+  VertexBufferLayout.cpp
+  Texture.cpp
+  正在生成代码...
