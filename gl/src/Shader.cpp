@@ -1,9 +1,12 @@
 #include "Shader.h"
 #include "Renderer.h"
+#include <filesystem>
 
 ShaderProgramSource Shader::ParseShader(const std::string& filepath)
 {
     std::ifstream stream(filepath);
+    std::filesystem::path absolutePath = std::filesystem::current_path();
+    std::cout << absolutePath << filepath << std::endl;
     enum ShaderType {
         NONE = -1, VERTEX = 0, FRAGMENT = 1
     };
