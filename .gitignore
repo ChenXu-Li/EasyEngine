@@ -155,3 +155,10 @@ gl/x64/Release/vc143.pdb
 gl/x64/Release/VertexArray.obj
 gl/x64/Release/VertexBuffer.obj
 gl/x64/Release/VertexBufferLayout.obj
+gl/x64/Release/Application.obj
+gl/x64/Release/glm.cppm.ifc.dt.d.json
+gl/x64/Release/glm.cppm.ifc.dt.module.json
+gl/x64/Release/glm.cppm.ifc.dt.module.json.command
+gl/x64/Release/TestClearColor.obj
+x64/Release/gl.exe
+x64/Release/gl.pdb
