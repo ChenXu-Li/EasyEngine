@@ -14,6 +14,7 @@
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "tests/TestClearColor.h"
+#include "tests/TestTexture2d.h"
 // Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
@@ -62,8 +63,7 @@ GLFWwindow* env_init() {
 
 
 
-    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC1_ALPHA));
-    GLCall(glEnable(GL_BLEND));
+    
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -77,86 +77,59 @@ GLFWwindow* env_init() {
     ImGui_ImplOpenGL3_Init(glsl_version);
     return window;
 }
-void test_tex_combine(GLFWwindow* window)
+void test_framework(GLFWwindow* window)
 {
-    GLfloat vertices[] = {
-        // 位置              // 颜色          //纹理
-     -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   0.0f, 0.0f,// 左下
-     0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 0.0f,   2.0f, 0.0f,// 右下
-     0.5f,  0.5f, 0.0f,  0.0f, 1.0f, 1.0f,   2.0f, 2.0f,//  右上
-    -0.5f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f,   0.0f, 2.0f,// 左上    
-    };
-    GLuint indices[] = {  // Note that we start from 0!
-        0, 1, 2, // First Triangle
-         2, 3,0// Second Triangle
-    };
 
 
-    VertexBuffer vb(vertices, 4 * 8 * sizeof(float));
+    test::Test* currentTest = nullptr;
+    test::Testmenu* testMenu = new test::Testmenu(currentTest);
+    currentTest = testMenu;
+    testMenu->RegisterTest<test::TestClearColor>("clear color");
+    testMenu->RegisterTest<test::TestTexture2d>("texture combine");
 
-    VertexBufferLayout vblayout;
-    vblayout.Push<float>(3);
-    vblayout.Push<float>(3);
-    vblayout.Push<float>(2);
-
-    VertexArray va;
-    va.AddBuffer(vb, vblayout);
-
-    IndexBuffer ib(indices, 6);
-
-    Shader sh("res/shader/tex.shaderg");
-
-
-    Texture textureA("res/texture/2.png");
-    Texture textureB("res/texture/3.png");
-    textureA.Bind(0);
-    textureB.Bind(2);
-
-    sh.Bind();
-    sh.SetUniform1i("u_TextureA", 0);
-    sh.SetUniform1i("u_TextureB", 2);
-
-
-    va.Unbind();
-    vb.Unbind();
-    ib.Unbind();
-    sh.Unbind();
-
-    Renderer renderer;
-
-    test::TestClearColor test;
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     // Game loop
     while (!glfwWindowShouldClose(window))
     {
         // Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
         glfwPollEvents();
+        GLCall(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
+        GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
-   
-
-        test.OnUpdate(0.0f);
-        test.OnRender();
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
         
-        test.OnImGuiRender();
+        if (currentTest) {
+            currentTest->OnUpdate(0.0f);
+            currentTest->OnRender();
+            ImGui::Begin("Test");
+            if (currentTest != testMenu && ImGui::Button("<-")) {
+                delete currentTest;
+                currentTest = testMenu;
+            }
+            currentTest->OnImGuiRender();
+            ImGui::End();
+        }
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         
-        //renderer.Draw(va, ib, sh);
+        
 
         glfwSwapBuffers(window);
     }
-
+    delete currentTest;
+    if (currentTest != testMenu) {
+        delete testMenu;
+    }
     // Terminate GLFW, clearing any resources allocated by GLFW.
     glfwTerminate();
 }
 void main() {
 
-    test_tex_combine(env_init());
+    test_framework(env_init());
 }
 // Is called whenever a key is pressed/released via GLFW
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)

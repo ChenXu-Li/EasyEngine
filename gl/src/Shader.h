@@ -26,7 +26,11 @@ public:
 	void SetUniform1f(const std::string& name,float v0);
 	void SetUniform1i(const std::string& name, int value);
 	void SetUniform1ui(const std::string& name, unsigned int value);
-	void SetUniform1Mat4fv(const std::string& name, glm::mat4 trans);
+	void SetUniform2f(const std::string& name, const glm::vec2& value);
+	void SetUniform3f(const std::string& name, const glm::vec3& value);
+	void SetUniform4f(const std::string& name, const glm::vec4& value);
+	void SetUniformMat3(const std::string& name, const glm::mat3& matrix);
+	void SetUniformMat4fv(const std::string& name, glm::mat4 trans);
 	int GetUniformLocation(const std::string& name);
 	
 	ShaderProgramSource ParseShader(const std::string& filepath);
