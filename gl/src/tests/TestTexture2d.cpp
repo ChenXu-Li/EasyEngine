@@ -3,6 +3,7 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
+
 test::TestTexture2d::TestTexture2d()
 {
     GLfloat vertices[] = {
@@ -34,20 +35,11 @@ test::TestTexture2d::TestTexture2d()
     //VertexArray va;
     m_VAO->AddBuffer(*m_VertexBuffer, vblayout);
 
-    //IndexBuffer ib(indices, 6);
-
-    //Shader sh("res/shader/tex.shaderg");
+  
 
     m_Texture1 = std::make_unique<Texture>("res/texture/1.png");
     m_Texture2 = std::make_unique<Texture>("res/texture/2.png");
-    //Texture textureA("res/texture/2.png");
-    //Texture textureB("res/texture/3.png");
-    //textureA.Bind(0);
-    //textureB.Bind(2);
-
-    /*sh.Bind();
-    sh.SetUniform1i("u_TextureA", 0);
-    sh.SetUniform1i("u_TextureB", 2);*/
+   
 
 
 }

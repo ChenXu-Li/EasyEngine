@@ -149,6 +149,8 @@
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\tests\Test.cpp" />
+    <ClCompile Include="src\tests\TestMatrix.cpp" />
+    <ClCompile Include="src\tests\TestMusicFFT.cpp" />
     <ClCompile Include="src\tests\TestTexture2d.cpp" />
     <ClCompile Include="src\vendor\glm\detail\glm.cpp" />
     <ClCompile Include="src\vendor\glm\glm.cppm" />
@@ -171,6 +173,8 @@
     <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\tests\Test.h" />
+    <ClInclude Include="src\tests\TestMatrix.h" />
+    <ClInclude Include="src\tests\TestMusicFFT.h" />
     <ClInclude Include="src\tests\TestTexture2d.h" />
     <ClInclude Include="src\vendor\glm\common.hpp" />
     <ClInclude Include="src\vendor\glm\detail\compute_common.hpp" />

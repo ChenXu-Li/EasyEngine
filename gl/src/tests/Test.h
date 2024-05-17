@@ -11,6 +11,7 @@ namespace test {
 
 		virtual void OnUpdate(float deltaTime) {}
 		virtual void OnRender() {}
+		virtual void OnStart() {}
 		virtual void OnImGuiRender() {}
 	};
 	class Testmenu:public Test

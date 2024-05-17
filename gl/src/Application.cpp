@@ -15,11 +15,13 @@
 #include "imgui/imgui_impl_opengl3.h"
 #include "tests/TestClearColor.h"
 #include "tests/TestTexture2d.h"
+#include "tests/TestMatrix.h"
+#include "tests/TestMusicFFT.h"
 // Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
 // Window dimensions
-const GLuint WIDTH = 600, HEIGHT = 600;
+extern const GLuint WIDTH = 600, HEIGHT = 600;
 
 GLFWwindow* env_init() {
     std::cout << "Starting GLFW context, OpenGL 4.3" << std::endl;
@@ -86,6 +88,8 @@ void test_framework(GLFWwindow* window)
     currentTest = testMenu;
     testMenu->RegisterTest<test::TestClearColor>("clear color");
     testMenu->RegisterTest<test::TestTexture2d>("texture combine");
+    testMenu->RegisterTest<test::TestMatrix>("matrix");
+    testMenu->RegisterTest<test::TestMusicFFT>("music FFT");
 
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     // Game loop
