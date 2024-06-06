@@ -7,6 +7,7 @@
 #include"Shader.h"
 #include"VertexArray.h"
 #include"Texture.h"
+
 namespace test {
 
 	class TestMatrix : public Test
@@ -27,6 +28,7 @@ namespace test {
 		glm::mat4 m_view;
 		glm::mat4 m_projection;
 		glm::mat4 m_mvp;
+
 		float m_r ;
 		float m_angle;
 		float m_increment ;

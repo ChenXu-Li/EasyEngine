@@ -39,7 +39,9 @@ namespace test {
 		glm::mat4 m_projection;
 		glm::mat4 m_mvp;
 		float m_r;
-		float m_angle;
+		float m_radius;
+		float m_angle_x;
+		float m_angle_y;
 		float m_increment;
 
 	};

@@ -17,11 +17,12 @@
 #include "tests/TestTexture2d.h"
 #include "tests/TestMatrix.h"
 #include "tests/TestMusicFFT.h"
+#include "tests/TestStringArt.h"
 // Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
 // Window dimensions
-extern const GLuint WIDTH = 600, HEIGHT = 600;
+extern const GLuint WIDTH = 1000, HEIGHT = 1000;
 
 GLFWwindow* env_init() {
     std::cout << "Starting GLFW context, OpenGL 4.3" << std::endl;
@@ -90,8 +91,13 @@ void test_framework(GLFWwindow* window)
     testMenu->RegisterTest<test::TestTexture2d>("texture combine");
     testMenu->RegisterTest<test::TestMatrix>("matrix");
     testMenu->RegisterTest<test::TestMusicFFT>("music FFT");
+    testMenu->RegisterTest<test::TestStringArt>("TestStringArt");
 
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    // 
+    double lastTime = glfwGetTime();
+    double currentTime;
+    float deltaTime;
     // Game loop
     while (!glfwWindowShouldClose(window))
     {
@@ -100,13 +106,17 @@ void test_framework(GLFWwindow* window)
         GLCall(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
         GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
+        currentTime = glfwGetTime();
+        deltaTime = static_cast<float>(currentTime - lastTime);
+        lastTime = currentTime;
+
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
         
         if (currentTest) {
-            currentTest->OnUpdate(0.0f);
+            currentTest->OnUpdate(deltaTime);
             currentTest->OnRender();
             ImGui::Begin("Test");
             if (currentTest != testMenu && ImGui::Button("<-")) {
