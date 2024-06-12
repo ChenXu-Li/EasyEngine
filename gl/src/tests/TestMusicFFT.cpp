@@ -12,7 +12,7 @@
 #include<iostream>
 #include <cmath> 
 
-const GLuint WIDTH = 700, HEIGHT = 700;
+extern GLuint WIDTH , HEIGHT;
 namespace test {
     TestMusicFFT::TestMusicFFT()
         :m_r(0.5f), m_angle_x(0.0f), m_angle_y(0.0f), m_increment(0.05f)

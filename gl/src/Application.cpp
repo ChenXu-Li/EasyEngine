@@ -18,12 +18,14 @@
 #include "tests/TestMatrix.h"
 #include "tests/TestMusicFFT.h"
 #include "tests/TestStringArt.h"
+#include "tests/TestCamera.h"
 // Function prototypes
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
+static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
 // Window dimensions
-extern const GLuint WIDTH = 1000, HEIGHT = 1000;
-
+GLuint WIDTH = 1000, HEIGHT = 1000;
+GLFWwindow* MainWindow;
+bool keys[1024];
 GLFWwindow* env_init() {
     std::cout << "Starting GLFW context, OpenGL 4.3" << std::endl;
     GLint nrAttributes;
@@ -39,6 +41,7 @@ GLFWwindow* env_init() {
 
     // Create a GLFWwindow object that we can use for GLFW's functions
     GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", nullptr, nullptr);
+    MainWindow = window;
     if (window == nullptr)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -92,6 +95,7 @@ void test_framework(GLFWwindow* window)
     testMenu->RegisterTest<test::TestMatrix>("matrix");
     testMenu->RegisterTest<test::TestMusicFFT>("music FFT");
     testMenu->RegisterTest<test::TestStringArt>("TestStringArt");
+    testMenu->RegisterTest<test::TestCamera>("Camera");
 
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     // 
@@ -146,9 +150,16 @@ void main() {
     test_framework(env_init());
 }
 // Is called whenever a key is pressed/released via GLFW
-static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
     std::cout << key << std::endl;
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
+    if (key >= 0 && key < 1024)
+    {
+        if (action == GLFW_PRESS)
+            keys[key] = true;
+        else if (action == GLFW_RELEASE)
+            keys[key] = false;
+    }
 }

@@ -32,10 +32,13 @@ test::TestStringArt::TestStringArt() : flag(true),need_fresh_buffer_flag(false) 
     GLfloat bx = 0.5f, by = -0.5f, bz = 0.0f;
     GLfloat cx = 0.0f, cy = sqrt(3.0f) / 2 - 0.5f, cz = 0.0f;
 
-    int iterations = 10; // Number of iterations for the Koch snowflake
-    generateKochSnowflake(ax, ay, az, bx, by, bz, iterations);
-    generateKochSnowflake(bx, by, bz, cx, cy, cz, iterations);
-    generateKochSnowflake(cx, cy, cz, ax, ay, az, iterations);
+    //int iterations = 10; // Number of iterations for the Koch snowflake
+    //generateKochSnowflake(ax, ay, az, bx, by, bz, iterations);
+    //generateKochSnowflake(bx, by, bz, cx, cy, cz, iterations);
+    //generateKochSnowflake(cx, cy, cz, ax, ay, az, iterations);
+    m_Queue.emplace(ax, ay, az, bx, by, bz, 0);
+    m_Queue.emplace(bx, by, bz, cx, cy, cz, 0);
+    m_Queue.emplace(cx, cy, cz, ax, ay, az, 0);
 }
 
 test::TestStringArt::~TestStringArt() {
@@ -45,13 +48,19 @@ test::TestStringArt::~TestStringArt() {
 }
 
 void test::TestStringArt::OnUpdate(float deltaTime) {
-    static float ff = 0;
-    ff += deltaTime;
+    static float sum_t = 0;
+    static int iter = 0;
+    sum_t += deltaTime;
+    if (sum_t > 2) {
+        sum_t = 0;
+        upadteLines(iter++);
+    }
     if (flag) {
         flag = false;
-        std::cout << "add line!!!!!!!!" << std::endl;
-        //addLine(0.5f, 0.5f, 0.0f, -0.5f, -0.5f, 0.0f);
-   }
+        
+    }
+    
+
     //std::cout << "deltaTime:" << deltaTime<<"sum:"<<ff<<std::endl;
 }
 
@@ -111,4 +120,42 @@ void test::TestStringArt::generateKochSnowflake(GLfloat ax, GLfloat ay, GLfloat 
     generateKochSnowflake(mx, my, mz, ox, oy, oz, iterations - 1);
     generateKochSnowflake(ox, oy, oz, nx, ny, nz, iterations - 1);
     generateKochSnowflake(nx, ny, nz, bx, by, bz, iterations - 1);
+}
+void test::TestStringArt::upadteLines(int iter) {
+    m_Vertices.clear();
+    while (!m_Queue.empty()) {
+        auto [ax, ay, az, bx, by, bz, i] = m_Queue.front();
+        
+
+        if (i == iter) {
+            m_Queue.pop();
+            addLine(ax, ay, az, bx, by, bz);
+        }
+        else if(i == iter+1) {
+            break;
+        }
+        else {
+            std::cout << "wrong" << std::endl;
+        }
+
+        GLfloat mx = (2 * ax + bx) / 3;
+        GLfloat my = (2 * ay + by) / 3;
+        GLfloat mz = (2 * az + bz) / 3;
+
+        GLfloat nx = (2 * bx + ax) / 3;
+        GLfloat ny = (2 * by + ay) / 3;
+        GLfloat nz = (2 * bz + az) / 3;
+
+        /*GLfloat ox = mx + (nx - mx) * cos(M_PI / 3) - (ny - my) * sin(M_PI / 3);
+        GLfloat oy = my + (nx - mx) * sin(M_PI / 3) + (ny - my) * cos(M_PI / 3);*/
+        GLfloat ox = mx/2 + nx/2  + (ny - my) * sin(M_PI / 3);
+        GLfloat oy = my/2+ny/2 - (nx - mx) * sin(M_PI / 3) ;
+        GLfloat oz = mz;
+
+        m_Queue.emplace(ax, ay, az, mx, my, mz, iter + 1);
+        m_Queue.emplace(mx, my, mz, ox, oy, oz, iter + 1);
+        m_Queue.emplace(ox, oy, oz, nx, ny, nz, iter + 1);
+        m_Queue.emplace(nx, ny, nz, bx, by, bz, iter + 1);
+    }
+
 }
