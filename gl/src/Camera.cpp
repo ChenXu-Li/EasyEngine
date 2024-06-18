@@ -57,11 +57,11 @@ void Camera::OnImGuiRender()
         {
             ImGui::BeginGroup();
             ImGui::PushItemWidth(80);
-            ImGui::DragFloat("X", &Position.x, 0.1f, -10.0f, 10.0f);
+            ImGui::DragFloat("X", &Position.x, 0.1f);
             ImGui::SameLine();
-            ImGui::DragFloat("Y", &Position.y, 0.1f, -10.0f, 10.0f);
+            ImGui::DragFloat("Y", &Position.y, 0.1f);
             ImGui::SameLine();
-            ImGui::DragFloat("Z", &Position.z, 0.1f, -10.0f, 10.0f);
+            ImGui::DragFloat("Z", &Position.z, 0.1f);
             ImGui::PopItemWidth();
             ImGui::EndGroup();
 
@@ -99,8 +99,8 @@ void Camera::OnImGuiRender()
         // 显示相机速度
         if (ImGui::TreeNode("Camera Speed"))
         {
-            ImGui::DragFloat("Movement Speed", &MovementSpeed, 0.1f, 0.0f, 10.0f);
-            ImGui::DragFloat("Rotation Speed", &RotateSpeed, 0.1f, 0.0f, 20.0f);
+            ImGui::DragFloat("Movement Speed", &MovementSpeed, 0.1f, 0.0f, 20.0f);
+            ImGui::DragFloat("Rotation Speed", &RotateSpeed, 0.1f, 0.0f, 60.0f);
             ImGui::TreePop();
         }
 

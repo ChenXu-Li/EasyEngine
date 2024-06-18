@@ -143,6 +143,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\GameObjectCube.cpp" />
+    <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\IndexBuffer.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -167,9 +170,16 @@
     <ClCompile Include="src\VertexBufferLayout.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\tests\TestClearColor.cpp" />
+    <ClCompile Include="src\tests\TestStringArt.cpp" />
+    <ClCompile Include="src\tests\TestCamera.cpp" />
+    <ClCompile Include="src\tests\TestGameObject.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\GameObjectCube.h" />
+    <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\GameObject.h" />
     <ClInclude Include="src\IndexBuffer.h" />
+    <ClInclude Include="src\MeshData.h" />
     <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\tests\Test.h" />
@@ -479,6 +489,9 @@
     <ClInclude Include="src\VertexBufferLayout.h" />
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\tests\TestClearColor.h" />
+    <ClInclude Include="src\tests\TestStringArt.h" />
+    <ClInclude Include="src\tests\TestCamera.h" />
+    <ClInclude Include="src\tests\TestGameObject.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shader\tex.shaderg" />

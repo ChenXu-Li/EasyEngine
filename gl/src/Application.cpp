@@ -19,6 +19,8 @@
 #include "tests/TestMusicFFT.h"
 #include "tests/TestStringArt.h"
 #include "tests/TestCamera.h"
+#include "tests/TestGameObject.h"
+
 // Function prototypes
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
@@ -96,6 +98,8 @@ void test_framework(GLFWwindow* window)
     testMenu->RegisterTest<test::TestMusicFFT>("music FFT");
     testMenu->RegisterTest<test::TestStringArt>("TestStringArt");
     testMenu->RegisterTest<test::TestCamera>("Camera");
+    testMenu->RegisterTest<test::TestGameObject>("TestGameObject");
+    
 
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     // 
@@ -152,7 +156,7 @@ void main() {
 // Is called whenever a key is pressed/released via GLFW
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
-    std::cout << key << std::endl;
+    //std::cout << key << std::endl;
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
     if (key >= 0 && key < 1024)

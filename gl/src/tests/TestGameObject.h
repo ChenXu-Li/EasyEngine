@@ -8,14 +8,17 @@
 #include"VertexArray.h"
 #include"Texture.h"
 #include <Camera.h>
+#include "GameObject.h"
+#include "GameObjectCube.h"
 #include <GLFW/glfw3.h>
 namespace test {
 	class TestGameObject : public Test
 	{
 	public:
+
 		TestGameObject();
 		~TestGameObject();
-
+		void CreateScene();
 		void OnUpdate(float deltaTime) override;
 		void OnRender() override;
 		void OnImGuiRender()override;
@@ -27,11 +30,9 @@ namespace test {
 		glm::mat4 m_model;
 		glm::mat4 m_view;
 		glm::mat4 m_projection;
-		glm::mat4 m_mvp;
-		Camera m_camera;
 
-		float m_r;
-		float m_angle;
-		float m_increment;
+		Camera m_camera;
+		std::unique_ptr<GameObject> m_rootObject;
+
 	};
 }
