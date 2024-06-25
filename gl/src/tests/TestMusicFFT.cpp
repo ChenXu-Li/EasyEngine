@@ -19,36 +19,8 @@ namespace test {
     {
         GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC1_ALPHA));
         GLCall(glEnable(GL_BLEND));
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        //GLfloat vertices[] = {
-        //    // 位置              // 颜色          //纹理
-        // -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // 左下
-        // 0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 0.0f,   // 右下
-        // 0.5f,  0.5f, 0.0f,  0.0f, 1.0f, 1.0f,   //  右上
-        //-0.5f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f,   // 左上    
-        //};
-        //GLuint indices[] = {  // Note that we start from 0!
-        //    0, 1, 2, // First Triangle
-        //     2, 3,0// Second Triangle
-        //};
-        //m_Shader = std::make_unique<Shader>("res/shader/basic.shaderg");
-        //m_VAO = std::make_unique<VertexArray>();
-        //m_IndexBuffer = std::make_unique<IndexBuffer>(indices, 6);
-        //m_VertexBuffer = std::make_unique<VertexBuffer>(vertices, 4 * 6 * sizeof(float));
+        GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
 
-
-        //VertexBufferLayout vblayout;
-        //vblayout.Push<float>(3);
-        //vblayout.Push<float>(3);
-
-        //m_VAO->AddBuffer(*m_VertexBuffer, vblayout);
-
-        //m_projection = glm::mat4(1.0f);
-        //m_projection = glm::perspective(45.0f, (float)WIDTH / HEIGHT, 0.1f, 100.0f);
-        //m_view = glm::mat4(1.0f);
-        //m_view = glm::translate(m_view, glm::vec3(0.0f, 0.0f, -1.0f));
-        //m_model = glm::mat4(1.0f);
-        //m_model = glm::scale(m_model, glm::vec3(1.0f, 1.0f, 1.0f));
         
         GLfloat vertices[] = {
             // 位置              // 颜色         
@@ -101,6 +73,10 @@ namespace test {
 
     TestMusicFFT::~TestMusicFFT()
     {
+
+        GLCall(glDisable(GL_BLEND));
+        GLCall(glBlendFunc(GL_ONE, GL_ZERO));
+        GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
     }
 
     void TestMusicFFT::OnUpdate(float deltaTime)

@@ -25,8 +25,7 @@ test::TestTexture2d::TestTexture2d()
     m_VAO = std::make_unique<VertexArray>();
     m_IndexBuffer = std::make_unique<IndexBuffer>(indices, 6);
     m_VertexBuffer = std::make_unique<VertexBuffer>(vertices, 4 * 8 * sizeof(float));
-    //VertexBuffer vb(vertices, 4 * 8 * sizeof(float));
-
+  
     VertexBufferLayout vblayout;
     vblayout.Push<float>(3);
     vblayout.Push<float>(3);

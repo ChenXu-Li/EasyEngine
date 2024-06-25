@@ -8,6 +8,7 @@
 #include"VertexArray.h"
 #include"Texture.h"
 #include <Camera.h>
+#include "Light.h"
 #include "GameObject.h"
 #include "GameObjectCube.h"
 #include <GLFW/glfw3.h>
@@ -27,11 +28,12 @@ namespace test {
 		std::unique_ptr<IndexBuffer> m_IndexBuffer;
 		std::unique_ptr<VertexBuffer> m_VertexBuffer;
 		std::unique_ptr<Shader> m_Shader;
-		glm::mat4 m_model;
+		//glm::mat4 m_model;
 		glm::mat4 m_view;
 		glm::mat4 m_projection;
 
 		Camera m_camera;
+		Light  m_light;
 		std::unique_ptr<GameObject> m_rootObject;
 
 	};

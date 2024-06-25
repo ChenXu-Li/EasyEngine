@@ -165,36 +165,36 @@ void Camera::ProcessKeyboard(Camera_Movement direction, GLfloat deltaTime)
 }
         
 
-void Camera::ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset, GLboolean constrainPitch)
-{
-    xoffset *= this->MouseSensitivity;
-    yoffset *= this->MouseSensitivity;
-
-    this->Yaw += xoffset;
-    this->Pitch += yoffset;
-
-    // Make sure that when pitch is out of bounds, screen doesn't get flipped
-    if (constrainPitch)
-    {
-        if (this->Pitch > 89.0f)
-            this->Pitch = 89.0f;
-        if (this->Pitch < -89.0f)
-            this->Pitch = -89.0f;
-    }
-
-    // Update Front, Right and Up Vectors using the updated Eular angles
-    this->updateCameraVectors();
-}
-
-void Camera::ProcessMouseScroll(GLfloat yoffset)
-{
-    if (this->Zoom >= 1.0f && this->Zoom <= 45.0f)
-        this->Zoom -= yoffset;
-    if (this->Zoom <= 1.0f)
-        this->Zoom = 1.0f;
-    if (this->Zoom >= 45.0f)
-        this->Zoom = 45.0f;
-}
+//void Camera::ProcessMouseMovement(GLfloat xoffset, GLfloat yoffset, GLboolean constrainPitch)
+//{
+//    xoffset *= this->MouseSensitivity;
+//    yoffset *= this->MouseSensitivity;
+//
+//    this->Yaw += xoffset;
+//    this->Pitch += yoffset;
+//
+//    // Make sure that when pitch is out of bounds, screen doesn't get flipped
+//    if (constrainPitch)
+//    {
+//        if (this->Pitch > 89.0f)
+//            this->Pitch = 89.0f;
+//        if (this->Pitch < -89.0f)
+//            this->Pitch = -89.0f;
+//    }
+//
+//    // Update Front, Right and Up Vectors using the updated Eular angles
+//    this->updateCameraVectors();
+//}
+//
+//void Camera::ProcessMouseScroll(GLfloat yoffset)
+//{
+//    if (this->Zoom >= 1.0f && this->Zoom <= 45.0f)
+//        this->Zoom -= yoffset;
+//    if (this->Zoom <= 1.0f)
+//        this->Zoom = 1.0f;
+//    if (this->Zoom >= 45.0f)
+//        this->Zoom = 45.0f;
+//}
 
 void Camera::Do_Movement(float deltaTime)
 {

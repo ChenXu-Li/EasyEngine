@@ -31,11 +31,14 @@ test::TestGameObject::TestGameObject()
 void test::TestGameObject::CreateScene()
 {
     m_camera = Camera(glm::vec3(0.0f, 30.0f, 30.0f));
+    m_light = Light("light");
+    m_light.SetPosition(glm::vec3(0.0f, 20.0f, 0.0f));
+    m_light.SetLightColor(glm::vec3(1.0f, 1.0f, 0.0f));
 
     m_rootObject = std::make_unique<GameObject>("SceneRoot");
     m_rootObject->SetPosition(glm::vec3(0.0f, 0.0f, -1.0f));
 
-
+ 
     // 创建对象 A
     auto objectA = std::make_shared<GameObject>("A");
     objectA->SetPosition(glm::vec3(-14.5f, 0.0f, 0.0f));
@@ -109,8 +112,9 @@ void test::TestGameObject::CreateScene()
 void test::TestGameObject::OnUpdate(float deltaTime)
 {
     m_camera.OnUpdate(deltaTime);
+    m_light.Update(deltaTime);
  
-    m_model = glm::rotate(m_model, glm::radians(0.5f), glm::vec3(0.0, 0.0, 1.0));
+   // m_model = glm::rotate(m_model, glm::radians(0.5f), glm::vec3(0.0, 0.0, 1.0));
 
     m_view = m_camera.GetViewMatrix();
 
@@ -124,8 +128,9 @@ void test::TestGameObject::OnRender()
     GLCall(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
     GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
     
+    m_light.Render(glm::mat4(1.0f), m_projection, m_view);
 
-    m_rootObject->Render(glm::mat4(1.0f), m_projection, m_view);
+    m_rootObject->Render(glm::mat4(1.0f), m_projection, m_view, m_light.GetPosition(), m_light.GetLightColor(), m_camera.Position);
 }
 
 void test::TestGameObject::OnImGuiRender()
@@ -134,6 +139,7 @@ void test::TestGameObject::OnImGuiRender()
 
     ImGui::SetNextItemOpen(true, ImGuiCond_Once);
     m_camera.OnImGuiRender();
+    m_light.ImGuiRender();
     m_rootObject->ImGuiRender();
 
 

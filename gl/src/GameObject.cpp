@@ -11,35 +11,7 @@ GameObject::GameObject(std::string n)
     name = name+"("+type+")";
     name_cstr = name.c_str();
     std::cout << name << " was created" << std::endl;
-    // Initialize graphics resources
-    //GLfloat vertices[] = {
-    //    // Positions           // Colors            // Texture Coords
-    //    -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   0.0f, 0.0f,
-    //     0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 0.0f,   1.0f, 0.0f,
-    //     0.5f,  0.5f, 0.0f,  0.0f, 1.0f, 1.0f,   1.0f, 1.0f,
-    //    -0.5f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f,   0.0f, 1.0f,
-    //     0.0f,  0.0f, 0.5f,  1.0f, 1.0f, 1.0f,   0.5f, 0.5f,
-    //};
-    //GLuint indices[] = {
-    //    0, 1, 2,
-    //    2, 3, 0,
-    //    0, 4, 3,
-    //    0, 1, 4,
-    //    1, 2, 4,
-    //    2, 3, 4
-    //};
 
-    //m_Shader = std::make_unique<Shader>("res/shader/mvp.shaderg");
-    //m_VAO = std::make_unique<VertexArray>();
-    //m_IndexBuffer = std::make_unique<IndexBuffer>(indices, 18);
-    //m_VertexBuffer = std::make_unique<VertexBuffer>(vertices, 5 * 8 * sizeof(float));
-
-    //VertexBufferLayout vblayout;
-    //vblayout.Push<float>(3);
-    //vblayout.Push<float>(3);
-    //vblayout.Push<float>(2);
-
-    //m_VAO->AddBuffer(*m_VertexBuffer, vblayout);
 }
 
 GameObject::~GameObject() {
@@ -74,74 +46,71 @@ void GameObject::Update(float deltaTime) {
     }
 }
 
-void GameObject::Render(const glm::mat4& parentTransform, const glm::mat4& projection, const glm::mat4& view) {
+void GameObject::Render(const glm::mat4& parentTransform, const glm::mat4& projection, const glm::mat4& view, const glm::vec3& lightPos, const glm::vec3& lightColor, const glm::vec3& viewPos) {
 
     glm::mat4 globalTransform = parentTransform * m_ModelMatrix;
 
-   /* m_Shader->Bind();
-    m_Shader->SetUniformMat4fv("projection", projection);
-    m_Shader->SetUniformMat4fv("view", view);
-    m_Shader->SetUniformMat4fv("model", globalTransform);
-
-    Renderer renderer;
-    renderer.Draw(*m_VAO, *m_IndexBuffer, *m_Shader);*/
 
     // Render all children
     for (auto& child : m_Children) {
-        child->Render(globalTransform,projection,view);
+        child->Render(globalTransform,projection,view, lightPos, lightColor, viewPos);
     }
 }
 
 void GameObject::ImGuiRender()
 {
-    //const char* name_c = "666";
     if (ImGui::TreeNode(name_cstr)){
         ImGui::SetNextItemOpen(true, ImGuiCond_Once);
-        if (ImGui::TreeNode("Position"))
+        if (ImGui::TreeNode("Self_Attribute"))
         {
-            ImGui::BeginGroup();
-            ImGui::PushItemWidth(80);
-            ImGui::DragFloat("X", &m_Position.x, 0.1f);
-            ImGui::SameLine();
-            ImGui::DragFloat("Y", &m_Position.y, 0.1f);
-            ImGui::SameLine();
-            ImGui::DragFloat("Z", &m_Position.z, 0.1f);
-            ImGui::PopItemWidth();
-            ImGui::EndGroup();
+            if (ImGui::TreeNode("Position"))
+            {
+                ImGui::BeginGroup();
+                ImGui::PushItemWidth(80);
+                ImGui::DragFloat("X", &m_Position.x, 0.1f);
+                ImGui::SameLine();
+                ImGui::DragFloat("Y", &m_Position.y, 0.1f);
+                ImGui::SameLine();
+                ImGui::DragFloat("Z", &m_Position.z, 0.1f);
+                ImGui::PopItemWidth();
+                ImGui::EndGroup();
 
+                ImGui::TreePop();
+            }
+
+            // 显示相机角度
+            if (ImGui::TreeNode("Rotation"))
+            {
+
+                ImGui::BeginGroup();
+                ImGui::PushItemWidth(80);
+                ImGui::DragFloat("X", &m_Rotation.x, 0.1f);
+                ImGui::SameLine();
+                ImGui::DragFloat("Y", &m_Rotation.y, 0.1f);
+                ImGui::SameLine();
+                ImGui::DragFloat("Z", &m_Rotation.z, 0.1f);
+                ImGui::PopItemWidth();
+                ImGui::EndGroup();
+                ImGui::TreePop();
+            }
+            if (ImGui::TreeNode("Scale"))
+            {
+
+                ImGui::BeginGroup();
+                ImGui::PushItemWidth(80);
+                //ImGui::DragFloat("X", &m_Scale.x, 0.1f, 0.0f, 5.0f);
+                ImGui::DragFloat("X", &m_Scale.x, 0.1f);
+                ImGui::SameLine();
+                ImGui::DragFloat("Y", &m_Scale.y, 0.1f);
+                ImGui::SameLine();
+                ImGui::DragFloat("Z", &m_Scale.z, 0.1f);
+                ImGui::PopItemWidth();
+                ImGui::EndGroup();
+                ImGui::TreePop();
+            }
             ImGui::TreePop();
         }
-
-        // 显示相机角度
-        if (ImGui::TreeNode("Rotation"))
-        {
-
-            ImGui::BeginGroup();
-            ImGui::PushItemWidth(80);
-            ImGui::DragFloat("X", &m_Rotation.x, 0.1f);
-            ImGui::SameLine();
-            ImGui::DragFloat("Y", &m_Rotation.y, 0.1f);
-            ImGui::SameLine();
-            ImGui::DragFloat("Z", &m_Rotation.z, 0.1f);
-            ImGui::PopItemWidth();
-            ImGui::EndGroup();
-            ImGui::TreePop();
-        }
-        if (ImGui::TreeNode("Scale"))
-        {
-
-            ImGui::BeginGroup();
-            ImGui::PushItemWidth(80);
-            //ImGui::DragFloat("X", &m_Scale.x, 0.1f, 0.0f, 5.0f);
-            ImGui::DragFloat("X", &m_Scale.x, 0.1f);
-            ImGui::SameLine();
-            ImGui::DragFloat("Y", &m_Scale.y, 0.1f);
-            ImGui::SameLine();
-            ImGui::DragFloat("Z", &m_Scale.z, 0.1f);
-            ImGui::PopItemWidth();
-            ImGui::EndGroup();
-            ImGui::TreePop();
-        }
+        
 
         for (auto& child : m_Children) {
             child->ImGuiRender();

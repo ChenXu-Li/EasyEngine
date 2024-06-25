@@ -17,6 +17,7 @@
 #include "tests/TestTexture2d.h"
 #include "tests/TestMatrix.h"
 #include "tests/TestMusicFFT.h"
+#include "tests/TestFractal.h"
 #include "tests/TestStringArt.h"
 #include "tests/TestCamera.h"
 #include "tests/TestGameObject.h"
@@ -56,7 +57,7 @@ GLFWwindow* env_init() {
     glfwSetKeyCallback(window, key_callback);
 
     // Set this to true so GLEW knows to use a modern approach to retrieving function pointers and extensions
-    glewExperimental = GL_TRUE;
+    //glewExperimental = GL_TRUE;
     // Initialize GLEW to setup the OpenGL Function pointers
     if (glewInit() != GLEW_OK)
     {
@@ -92,13 +93,14 @@ void test_framework(GLFWwindow* window)
     test::Test* currentTest = nullptr;
     test::Testmenu* testMenu = new test::Testmenu(currentTest);
     currentTest = testMenu;
-    testMenu->RegisterTest<test::TestClearColor>("clear color");
-    testMenu->RegisterTest<test::TestTexture2d>("texture combine");
-    testMenu->RegisterTest<test::TestMatrix>("matrix");
-    testMenu->RegisterTest<test::TestMusicFFT>("music FFT");
-    testMenu->RegisterTest<test::TestStringArt>("TestStringArt");
-    testMenu->RegisterTest<test::TestCamera>("Camera");
-    testMenu->RegisterTest<test::TestGameObject>("TestGameObject");
+    testMenu->RegisterTest<test::TestClearColor>("Test Clear Color");
+    testMenu->RegisterTest<test::TestTexture2d>("Test Texture Combine");
+    testMenu->RegisterTest<test::TestMatrix>("Test Matrix Transfer");
+    testMenu->RegisterTest<test::TestMusicFFT>("Test Music FFT");
+    testMenu->RegisterTest<test::TestFractal>("Test Fractal");
+    testMenu->RegisterTest<test::TestStringArt>("Test StringArt");
+    testMenu->RegisterTest<test::TestCamera>("Test Camera");
+    testMenu->RegisterTest<test::TestGameObject>("Test GameObject"); 
     
 
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

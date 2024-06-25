@@ -1,77 +1,113 @@
 #include "TestStringArt.h"
 #define M_PI 3.1415926f
-test::TestStringArt::TestStringArt() : flag(true),need_fresh_buffer_flag(false) {
+test::TestStringArt::TestStringArt() : need_fresh_buffer_flag(false) {
+    glEnable(GL_PROGRAM_POINT_SIZE);
 
-
-    // 将初始顶点数据插入到成员变量 m_Vertices 中
     m_Shader = std::make_unique<Shader>("res/shader/bbase.shaderg");
 
-    // Generate and bind the Vertex Array Object (VAO)
     glGenVertexArrays(1, &m_VAO);
     glBindVertexArray(m_VAO);
 
-    // Generate and bind the Vertex Buffer Object (VBO)
     glGenBuffers(1, &m_VBO);
     glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-    //glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
     glBufferData(GL_ARRAY_BUFFER, m_Vertices.size() * sizeof(GLfloat), m_Vertices.data(), GL_DYNAMIC_DRAW);
 
-
-    // Specify the layout of the vertex data
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
 
-    // Unbind the VAO to prevent unintended modifications
     glBindVertexArray(0);
-  
 
-    std::cout << "Generating Koch snowflake!" << std::endl;
+    
 
-    // Initial triangle vertices
-    GLfloat ax = -0.5f, ay = -0.5f, az = 0.0f;
-    GLfloat bx = 0.5f, by = -0.5f, bz = 0.0f;
-    GLfloat cx = 0.0f, cy = sqrt(3.0f) / 2 - 0.5f, cz = 0.0f;
 
-    //int iterations = 10; // Number of iterations for the Koch snowflake
-    //generateKochSnowflake(ax, ay, az, bx, by, bz, iterations);
-    //generateKochSnowflake(bx, by, bz, cx, cy, cz, iterations);
-    //generateKochSnowflake(cx, cy, cz, ax, ay, az, iterations);
-    m_Queue.emplace(ax, ay, az, bx, by, bz, 0);
-    m_Queue.emplace(bx, by, bz, cx, cy, cz, 0);
-    m_Queue.emplace(cx, cy, cz, ax, ay, az, 0);
+
+
+    const int numPoints = 500;
+    m_numPoints = numPoints;
+    const GLfloat radius = 1.0f;
+
+    // 生成1000个点
+    for (int i = 0; i < numPoints; ++i) {
+        GLfloat angle = 2.0f * M_PI * i / numPoints; // 计算每个点的角度
+        GLfloat x = radius * std::cos(angle); // 计算x坐标
+        GLfloat y = radius * std::sin(angle); // 计算y坐标
+        GLfloat z = 0.0f; // z坐标为0
+        m_Points.emplace_back(x, y, z); // 将点加入到向量中
+    }
+
+    glGenVertexArrays(1, &m_VAO2);
+    glBindVertexArray(m_VAO2);
+    std::vector<GLfloat> pointsData;
+    for (const auto& point : m_Points) {
+        pointsData.push_back(std::get<0>(point));
+        pointsData.push_back(std::get<1>(point));
+        pointsData.push_back(std::get<2>(point));
+    }
+    glGenBuffers(1, &m_VBO2);
+    glBindBuffer(GL_ARRAY_BUFFER, m_VBO2);
+    glBufferData(GL_ARRAY_BUFFER, pointsData.size() * sizeof(GLfloat), pointsData.data(), GL_STATIC_DRAW);
+
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
+
+    glBindVertexArray(0);
+    
 }
 
 test::TestStringArt::~TestStringArt() {
 
     glDeleteBuffers(1, &m_VBO);
     glDeleteVertexArrays(1, &m_VAO);
+    glDeleteBuffers(1, &m_VBO2);
+    glDeleteVertexArrays(1, &m_VAO2);
+    glDisable(GL_PROGRAM_POINT_SIZE);
 }
 
 void test::TestStringArt::OnUpdate(float deltaTime) {
-    static float sum_t = 0;
-    static int iter = 0;
-    sum_t += deltaTime;
-    if (sum_t > 2) {
-        sum_t = 0;
-        upadteLines(iter++);
-    }
-    if (flag) {
-        flag = false;
-        
-    }
+    static int i = 0;
+     
+     static float sum_t = 0;
+     sum_t += deltaTime;
+     if (sum_t > 0.5) {
+         sum_t = 0;
+         addLine(i, (i + 100) % m_numPoints);
+         i+=20;
+         i %= m_numPoints;
+     }
     
-
-    //std::cout << "deltaTime:" << deltaTime<<"sum:"<<ff<<std::endl;
 }
 
 void test::TestStringArt::OnRender() {
-    drawLines();
+    drawPoints();
+    drawGraph();
 }
 
 void test::TestStringArt::OnImGuiRender() {
 }
 
-void test::TestStringArt::drawLines() {
+
+void test::TestStringArt::addLine(int a, int b) {
+    // add the new vertices to the list
+    m_Graph.emplace_back(a,b);
+
+    m_Vertices.push_back(std::get<0>(m_Points[a]));
+    m_Vertices.push_back(std::get<1>(m_Points[a]));
+    m_Vertices.push_back(std::get<2>(m_Points[a]));
+
+    m_Vertices.push_back(std::get<0>(m_Points[b]));
+    m_Vertices.push_back(std::get<1>(m_Points[b]));
+    m_Vertices.push_back(std::get<2>(m_Points[b]));
+    need_fresh_buffer_flag = true;
+
+}
+
+void test::TestStringArt::upadteBuffer()
+{
+   
+}
+
+void test::TestStringArt::drawGraph()
+{
     if (need_fresh_buffer_flag) {
         need_fresh_buffer_flag = false;
         glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
@@ -80,82 +116,19 @@ void test::TestStringArt::drawLines() {
     m_Shader->Bind();
     glBindVertexArray(m_VAO);
 
-    // Draw lines between vertices (using GL_LINE_LOOP to close the shape)
-    glDrawArrays(GL_LINES, 0, m_Vertices.size());
+    glDrawArrays(GL_LINES, 0, m_Vertices.size()/3);
+    //glDrawArrays(GL_POINTS, 0, m_Vertices.size());
 
-    // Unbind the VAO
     glBindVertexArray(0);
 }
-void test::TestStringArt::addLine(GLfloat x1, GLfloat y1, GLfloat z1, GLfloat x2, GLfloat y2, GLfloat z2){
-    // add the new vertices to the list
-    m_Vertices.push_back(x1);
-    m_Vertices.push_back(y1);
-    m_Vertices.push_back(z1);
+void test::TestStringArt::drawPoints()
+{
 
-    m_Vertices.push_back(x2);
-    m_Vertices.push_back(y2);
-    m_Vertices.push_back(z2);
-    need_fresh_buffer_flag = true;
+    m_Shader->Bind();
+    glBindVertexArray(m_VAO2);
 
+    glDrawArrays(GL_POINTS, 0, m_Points.size());
+
+    glBindVertexArray(0);
 }
-void test::TestStringArt::generateKochSnowflake(GLfloat ax, GLfloat ay, GLfloat az, GLfloat bx, GLfloat by, GLfloat bz, int iterations) {
-    if (iterations == 0) {
-        addLine(ax, ay, az, bx, by, bz);
-        return;
-    }
 
-    GLfloat mx = (2 * ax + bx) / 3;
-    GLfloat my = (2 * ay + by) / 3;
-    GLfloat mz = (2 * az + bz) / 3;
-
-    GLfloat nx = (2 * bx + ax) / 3;
-    GLfloat ny = (2 * by + ay) / 3;
-    GLfloat nz = (2 * bz + az) / 3;
-
-    GLfloat ox = mx + (nx - mx) * cos(M_PI / 3) - (ny - my) * sin(M_PI / 3);
-    GLfloat oy = my + (nx - mx) * sin(M_PI / 3) + (ny - my) * cos(M_PI / 3);
-    GLfloat oz = mz;
-
-    generateKochSnowflake(ax, ay, az, mx, my, mz, iterations - 1);
-    generateKochSnowflake(mx, my, mz, ox, oy, oz, iterations - 1);
-    generateKochSnowflake(ox, oy, oz, nx, ny, nz, iterations - 1);
-    generateKochSnowflake(nx, ny, nz, bx, by, bz, iterations - 1);
-}
-void test::TestStringArt::upadteLines(int iter) {
-    m_Vertices.clear();
-    while (!m_Queue.empty()) {
-        auto [ax, ay, az, bx, by, bz, i] = m_Queue.front();
-        
-
-        if (i == iter) {
-            m_Queue.pop();
-            addLine(ax, ay, az, bx, by, bz);
-        }
-        else if(i == iter+1) {
-            break;
-        }
-        else {
-            std::cout << "wrong" << std::endl;
-        }
-
-        GLfloat mx = (2 * ax + bx) / 3;
-        GLfloat my = (2 * ay + by) / 3;
-        GLfloat mz = (2 * az + bz) / 3;
-
-        GLfloat nx = (2 * bx + ax) / 3;
-        GLfloat ny = (2 * by + ay) / 3;
-        GLfloat nz = (2 * bz + az) / 3;
-
-        /*GLfloat ox = mx + (nx - mx) * cos(M_PI / 3) - (ny - my) * sin(M_PI / 3);
-        GLfloat oy = my + (nx - mx) * sin(M_PI / 3) + (ny - my) * cos(M_PI / 3);*/
-        GLfloat ox = mx/2 + nx/2  + (ny - my) * sin(M_PI / 3);
-        GLfloat oy = my/2+ny/2 - (nx - mx) * sin(M_PI / 3) ;
-        GLfloat oz = mz;
-
-        m_Queue.emplace(ax, ay, az, mx, my, mz, iter + 1);
-        m_Queue.emplace(mx, my, mz, ox, oy, oz, iter + 1);
-        m_Queue.emplace(ox, oy, oz, nx, ny, nz, iter + 1);
-        m_Queue.emplace(nx, ny, nz, bx, by, bz, iter + 1);
-    }
-
-}

@@ -49,6 +49,8 @@ test::TestMatrix::TestMatrix()
 
 test::TestMatrix::~TestMatrix()
 {
+    GLCall(glDisable(GL_BLEND));
+    GLCall(glBlendFunc(GL_ONE, GL_ZERO));
 }
 
 void test::TestMatrix::OnUpdate(float deltaTime)
