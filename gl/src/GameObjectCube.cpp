@@ -23,28 +23,28 @@ GameObjectCube::GameObjectCube(std::string n) : GameObject(n) {
         -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,       0.0f,  0.0f,  1.0f,
 
         // Left face
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,      -1.0f,  0.0f,  0.0f,
-        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,      -1.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,      -1.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,      -1.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,      -1.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f,  1.0f, 0.0f,      -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,  1.0f, 1.0f,      -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 1.0f,      -1.0f,  0.0f,  0.0f,
 
         // Right face
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,       1.0f,  0.0f,  0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,       1.0f,  0.0f,  0.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,       1.0f,  0.0f,  0.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, 0.0f,       1.0f,  0.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f, 0.0f,       1.0f,  0.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 0.0f,       1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,  1.0f, 1.0f,       1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, 1.0f,       1.0f,  0.0f,  0.0f,
 
          // Bottom face
-         -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,       0.0f, -1.0f,  0.0f,
-          0.5f, -0.5f, -0.5f,  1.0f, 1.0f,       0.0f, -1.0f,  0.0f,
-          0.5f, -0.5f,  0.5f,  1.0f, 0.0f,       0.0f, -1.0f,  0.0f,
-         -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,       0.0f, -1.0f,  0.0f,
+         -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,       0.0f, -1.0f,  0.0f,
+          0.5f, -0.5f, -0.5f,  1.0f, 0.0f,       0.0f, -1.0f,  0.0f,
+          0.5f, -0.5f,  0.5f,  1.0f, 1.0f,       0.0f, -1.0f,  0.0f,
+         -0.5f, -0.5f,  0.5f,  0.0f, 1.0f,       0.0f, -1.0f,  0.0f,
 
          // Top face
-         -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,       0.0f,  1.0f,  0.0f,
-          0.5f,  0.5f, -0.5f,  1.0f, 1.0f,       0.0f,  1.0f,  0.0f,
-          0.5f,  0.5f,  0.5f,  1.0f, 0.0f,       0.0f,  1.0f,  0.0f,
-         -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,       0.0f,  1.0f,  0.0f,
+         -0.5f,  0.5f, -0.5f,  0.0f, 0.0f,       0.0f,  1.0f,  0.0f,
+          0.5f,  0.5f, -0.5f,  1.0f, 0.0f,       0.0f,  1.0f,  0.0f,
+          0.5f,  0.5f,  0.5f,  1.0f, 1.0f,       0.0f,  1.0f,  0.0f,
+         -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,       0.0f,  1.0f,  0.0f,
     };
 
     GLuint indices[] = {
@@ -66,7 +66,7 @@ GameObjectCube::GameObjectCube(std::string n) : GameObject(n) {
     m_VAO = std::make_unique<VertexArray>();
     m_IndexBuffer = std::make_unique<IndexBuffer>(indices, 36);
     m_VertexBuffer = std::make_unique<VertexBuffer>(vertices, 24 * 8 * sizeof(float));
-    m_Texture = std::make_unique<Texture>("res/texture/1.png");
+    m_Texture = std::make_unique<Texture>("res/texture/ll.png");
     VertexBufferLayout vblayout;
     vblayout.Push<float>(3);
     vblayout.Push<float>(2);
@@ -87,6 +87,11 @@ void GameObjectCube::Render(const glm::mat4& parentTransform, const glm::mat4& p
     m_Shader->SetUniform3f("lightColor", lightColor);
     m_Shader->SetUniform3f("lightPos", lightPos);
     m_Shader->SetUniform3f("viewPos", viewPos);
+    m_Shader->SetUniform3f("material.ambient", glm::vec3(0.5f, 0.5f, 0.5f));
+    m_Shader->SetUniform3f("material.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
+    m_Shader->SetUniform3f("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+    m_Shader->SetUniform1f("material.shininess", 32.0f);
+
 
     Renderer renderer;
     renderer.Draw(*m_VAO, *m_IndexBuffer, *m_Shader);
