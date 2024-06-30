@@ -16,4 +16,5 @@ bool GLLogCall(const char* function, const char* file, int line);
 class Renderer {
 public:
     void Draw(const VertexArray& va,const IndexBuffer& ebo,const Shader& shader) const;
+    void DrawLINE(const VertexArray& vao, const IndexBuffer& ebo, const Shader& shader) const;
 };

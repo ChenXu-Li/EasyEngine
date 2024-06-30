@@ -4,7 +4,8 @@
 #include <memory>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include "Shader.h"
+#include "ShaderManager.h"
+//#include "Shader.h"
 #include "VertexArray.h"
 #include "IndexBuffer.h"
 #include "VertexBuffer.h"
@@ -39,7 +40,7 @@ protected:
 
 
     // Graphics resources
-    std::unique_ptr<Shader> m_Shader;
+    std::shared_ptr<Shader> m_Shader;
     std::unique_ptr<VertexArray> m_VAO;
     std::unique_ptr<IndexBuffer> m_IndexBuffer;
     std::unique_ptr<VertexBuffer> m_VertexBuffer;

@@ -63,6 +63,8 @@ void GameObject::ImGuiRender()
         ImGui::SetNextItemOpen(true, ImGuiCond_Once);
         if (ImGui::TreeNode("Self_Attribute"))
         {
+            ImGui::Checkbox("Selected", &m_Selected);
+
             if (ImGui::TreeNode("Position"))
             {
                 ImGui::BeginGroup();

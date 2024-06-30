@@ -120,6 +120,12 @@
     <ClCompile Include="src\GameObjectModel.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\ShaderManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TextureManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Renderer.h">
@@ -1083,6 +1089,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\GameObjectModel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ShaderManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TextureManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

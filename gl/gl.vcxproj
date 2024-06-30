@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\ShaderManager.cpp" />
     <ClCompile Include="src\GameObjectModel.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Light.cpp" />
@@ -178,8 +179,10 @@
     <ClCompile Include="src\tests\TestCamera.cpp" />
     <ClCompile Include="src\tests\TestGameObject.cpp" />
     <ClCompile Include="src\tests\TestStringArt.cpp" />
+    <ClCompile Include="src\TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ShaderManager.h" />
     <ClInclude Include="src\GameObjectModel.h" />
     <ClInclude Include="src\Light.h" />
     <ClInclude Include="src\GameObjectCube.h" />
@@ -501,6 +504,7 @@
     <ClInclude Include="src\tests\TestCamera.h" />
     <ClInclude Include="src\tests\TestGameObject.h" />
     <ClInclude Include="src\tests\TestStringArt.h" />
+    <ClInclude Include="src\TextureManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shader\light.shaderg" />

@@ -4,12 +4,14 @@
 #include <memory>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include "Shader.h"
+#include "ShaderManager.h"
+//#include "Shader.h"
 #include "VertexArray.h"
 #include "IndexBuffer.h"
 #include "VertexBuffer.h"
 #include "VertexBufferLayout.h"
-#include"Texture.h"
+//#include"Texture.h"
+#include "TextureManager.h"
 class GameObject {
 public:
     GameObject(std::string n = "default");
@@ -39,8 +41,10 @@ protected:
     std::vector<std::shared_ptr<GameObject>> m_Children;
 
     // Graphics resources
-    std::unique_ptr<Shader> m_Shader;
-    std::unique_ptr<Texture> m_Texture;
+    //std::unique_ptr<Shader> m_Shader;
+    std::shared_ptr<Shader> m_Shader;
+    //std::unique_ptr<Texture> m_Texture;
+    std::shared_ptr<Texture> m_Texture;
     std::unique_ptr<VertexArray> m_VAO;
     std::unique_ptr<IndexBuffer> m_IndexBuffer;
     std::unique_ptr<VertexBuffer> m_VertexBuffer;

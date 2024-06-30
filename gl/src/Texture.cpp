@@ -1,8 +1,12 @@
 #include "Texture.h"
+#include <filesystem>
 #include"stb_image/stb_image.h"
 Texture::Texture(const std::string& path)
 	:m_RendererID(0),m_FilePath(path),m_LocalBuffer(nullptr),m_Height(0),m_Width(0),m_Bpp(0)
 {
+	std::ifstream stream(path);
+	std::filesystem::path absolutePath = std::filesystem::current_path();
+	std::cout << absolutePath << path << std::endl;
 
 	stbi_set_flip_vertically_on_load(1);
 	m_LocalBuffer = stbi_load(path.c_str(), &m_Width, &m_Height, &m_Bpp, 4);

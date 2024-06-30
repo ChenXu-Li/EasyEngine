@@ -9,7 +9,8 @@ GameObjectModel::GameObjectModel(std::string n) : GameObject(n) {
     std::cout << name << " was created" << std::endl;
    
 
-    m_Shader = std::make_unique<Shader>("res/shader/modelpong.shaderg");
+    //m_Shader = std::make_unique<Shader>("res/shader/modelpong.shaderg");
+    m_Shader = ShaderManager::GetInstance().GetShader("res/shader/modelpong.shaderg");
    
     m_model = Model("D:/littlecode/OpenglProjects/basegl/gl/res/model/man.obj");
 

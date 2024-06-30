@@ -18,8 +18,19 @@ void Renderer::Draw(const VertexArray& vao, const IndexBuffer& ebo, const Shader
     vao.Bind();
     ebo.Bind();
     shader.Bind();
-    glLineWidth(2.0f);
+    GLCall(glLineWidth(2.0f));
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     GLCall(glDrawElements(GL_TRIANGLES, ebo.GetCount(), GL_UNSIGNED_INT, 0));
    //GLCall(glDrawArrays(GL_TRIANGLES, 0, 3));
+}
+void Renderer::DrawLINE(const VertexArray& vao, const IndexBuffer& ebo, const Shader& shader) const
+{
+    vao.Bind();
+    ebo.Bind();
+    shader.Bind();
+    GLCall(glLineWidth(2.0f));
+    GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
+    GLCall(glDrawElements(GL_TRIANGLES, ebo.GetCount(), GL_UNSIGNED_INT, 0));
+    GLCall(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
+   
 }

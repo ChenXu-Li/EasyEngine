@@ -33,7 +33,8 @@ Light::Light(std::string n)
        1, 2, 6, 6, 5, 1  // Right face
     };
 
-    m_Shader = std::make_unique<Shader>("res/shader/light.shaderg");
+   // m_Shader = std::make_unique<Shader>("res/shader/light.shaderg");
+    m_Shader = ShaderManager::GetInstance().GetShader("res/shader/light.shaderg");
     m_VAO = std::make_unique<VertexArray>();
     m_IndexBuffer = std::make_unique<IndexBuffer>(indices, 36);
     m_VertexBuffer = std::make_unique<VertexBuffer>(vertices, 8 * 3 * sizeof(float));

@@ -62,11 +62,15 @@ GameObjectCube::GameObjectCube(std::string n) : GameObject(n) {
         20, 21, 22, 22, 23, 20,
     };
 
-    m_Shader = std::make_unique<Shader>("res/shader/pong.shaderg");
+    //m_Shader = std::make_unique<Shader>("res/shader/pong.shaderg");
+    //m_Shader = std::make_shared<Shader>("res/shader/pong.shaderg");
+    m_Shader = ShaderManager::GetInstance().GetShader("res/shader/pong.shaderg");
+    m_Shader_selected = ShaderManager::GetInstance().GetShader("res/shader/light.shaderg");
     m_VAO = std::make_unique<VertexArray>();
     m_IndexBuffer = std::make_unique<IndexBuffer>(indices, 36);
     m_VertexBuffer = std::make_unique<VertexBuffer>(vertices, 24 * 8 * sizeof(float));
-    m_Texture = std::make_unique<Texture>("res/texture/ll.png");
+    //m_Texture = std::make_unique<Texture>("res/texture/ll.png");
+    m_Texture = TextureManager::GetInstance().GetTexture("res/texture/ll.png");
     VertexBufferLayout vblayout;
     vblayout.Push<float>(3);
     vblayout.Push<float>(2);
@@ -95,9 +99,20 @@ void GameObjectCube::Render(const glm::mat4& parentTransform, const glm::mat4& p
 
     Renderer renderer;
     renderer.Draw(*m_VAO, *m_IndexBuffer, *m_Shader);
-
+    if (m_Selected) {
+        //std::cout << name << "selected " << std::endl;
+        m_Shader_selected->Bind();
+        m_Shader_selected->SetUniformMat4fv("view", view);
+        m_Shader_selected->SetUniformMat4fv("projection", projection);
+        m_Shader_selected->SetUniformMat4fv("model", globalTransform);
+        m_Shader_selected->SetUniform3f("selfcolor", glm::vec3(1.0f, 1.0f, 1.0f));
+        renderer.DrawLINE(*m_VAO, *m_IndexBuffer, *m_Shader_selected);
+    }
     // Render all children
     for (auto& child : m_Children) {
         child->Render(globalTransform, projection, view, lightPos, lightColor, viewPos);
     }
+}
+void GameObjectCube::SelectedRender() {
+    
 }
