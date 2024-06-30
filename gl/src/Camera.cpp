@@ -4,6 +4,8 @@
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 extern bool keys[1024];
+
+
 Camera::Camera(glm::vec3 position, glm::vec3 up, GLfloat yaw, GLfloat pitch)
 {
     
@@ -21,7 +23,7 @@ Camera::Camera(glm::vec3 position, glm::vec3 up, GLfloat yaw, GLfloat pitch)
     std::cout << " [camera position]" << this->Position[0] << "   " << this->Position[1] << "   " << this->Position[2] << std::endl;
     std::cout << " [camera rotation]" << this->Yaw << "   " << this->Pitch <<  std::endl;
 }
-
+//
 Camera::Camera(GLfloat posX, GLfloat posY, GLfloat posZ, GLfloat upX, GLfloat upY, GLfloat upZ, GLfloat yaw, GLfloat pitch)
 {
     this->Position = glm::vec3(posX, posY, posZ);

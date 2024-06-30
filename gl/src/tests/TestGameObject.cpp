@@ -33,12 +33,17 @@ void test::TestGameObject::CreateScene()
     m_camera = Camera(glm::vec3(0.0f, 30.0f, 30.0f));
     m_light = Light("light");
     m_light.SetPosition(glm::vec3(0.0f, 20.0f, 0.0f));
-    m_light.SetLightColor(glm::vec3(1.0f, 1.0f, 0.0f));
+    m_light.SetLightColor(glm::vec3(1.0f, 1.0f, 1.0f));
 
     m_rootObject = std::make_unique<GameObject>("SceneRoot");
     m_rootObject->SetPosition(glm::vec3(0.0f, 0.0f, -1.0f));
 
  
+
+    auto objectM = std::make_shared <GameObjectModel>("Man");
+    objectM->SetPosition(glm::vec3(0.0f, 0.0f, 10.0f));
+    objectM->SetScale(glm::vec3(0.1f, 0.1f, 0.1f));
+    m_rootObject->AddChild(objectM);
     // 创建对象 A
     auto objectA = std::make_shared<GameObject>("A");
     objectA->SetPosition(glm::vec3(-14.5f, 0.0f, 0.0f));

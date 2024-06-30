@@ -11,6 +11,7 @@
 #include "Light.h"
 #include "GameObject.h"
 #include "GameObjectCube.h"
+#include "GameObjectModel.h"
 #include <GLFW/glfw3.h>
 namespace test {
 	class TestGameObject : public Test
