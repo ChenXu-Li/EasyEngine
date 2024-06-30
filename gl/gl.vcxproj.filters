@@ -69,9 +69,6 @@
     <ClCompile Include="src\vendor\imgui\imgui_widgets.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\Application.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\tests\TestClearColor.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -87,7 +84,7 @@
     <ClCompile Include="src\tests\TestMusicFFT.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\tests\TestStringArt.cpp">
+    <ClCompile Include="src\tests\TestFractal.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\GameObject.cpp">
@@ -103,6 +100,24 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\GameObjectCube.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tests\TestStringArt.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Light.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Application.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mesh.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Model.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameObjectModel.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1037,7 +1052,7 @@
     <ClInclude Include="src\tests\TestMusicFFT.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\tests\TestStringArt.h">
+    <ClInclude Include="src\tests\TestFractal.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\GameObject.h">
@@ -1055,7 +1070,19 @@
     <ClInclude Include="src\GameObjectCube.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\MeshData.h">
+    <ClInclude Include="src\tests\TestStringArt.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Light.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mesh.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Model.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameObjectModel.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1475,5 +1502,12 @@
     <None Include="src\vendor\glm\gtx\wrap.inl">
       <Filter>头文件</Filter>
     </None>
+    <None Include="res\shader\basetex.shaderg" />
+    <None Include="res\shader\basic.shaderg" />
+    <None Include="res\shader\bbase.shaderg" />
+    <None Include="res\shader\mvp.shaderg" />
+    <None Include="res\shader\pong.shaderg" />
+    <None Include="res\shader\light.shaderg" />
+    <None Include="res\shader\modelpong.shaderg" />
   </ItemGroup>
 </Project>

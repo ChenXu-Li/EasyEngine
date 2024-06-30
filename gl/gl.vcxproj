@@ -129,7 +129,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\GLEW\include;src\vendor;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\SFML\include;$(SolutionDir)Dependencies\FFTW\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\GLEW\include;src\vendor;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\SFML\include;$(SolutionDir)Dependencies\Assimp\include;$(SolutionDir)Dependencies\FFTW\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PreprocessorDefinitions>GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -138,17 +138,21 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\GLEW\lib;$(SolutionDir)Dependencies\SFML\lib;$(SolutionDir)Dependencies\GLFW\lib;$(SolutionDir)Dependencies\FFTW\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32s.lib;glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib;sfml-system.lib;sfml-window.lib;sfml-graphics.lib;openal32.lib;flac.lib;vorbisenc.lib;vorbisfile.lib;vorbis.lib;ogg.lib;winmm.lib;sfml-audio.lib;libfftw3-3.lib;freetype.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\GLEW\lib;$(SolutionDir)Dependencies\SFML\lib;$(SolutionDir)Dependencies\GLFW\lib;$(SolutionDir)Dependencies\Assimp\lib;$(SolutionDir)Dependencies\FFTW\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32s.lib;glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib;sfml-system.lib;sfml-window.lib;sfml-graphics.lib;openal32.lib;flac.lib;vorbisenc.lib;vorbisfile.lib;vorbis.lib;ogg.lib;winmm.lib;sfml-audio.lib;libfftw3-3.lib;freetype.lib;assimp-vc143-mt.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\GameObjectModel.cpp" />
+    <ClCompile Include="src\Application.cpp" />
+    <ClCompile Include="src\Light.cpp" />
     <ClCompile Include="src\GameObjectCube.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\GameObject.cpp" />
-    <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\IndexBuffer.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Mesh.cpp" />
+    <ClCompile Include="src\Model.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\tests\Test.cpp" />
@@ -170,16 +174,20 @@
     <ClCompile Include="src\VertexBufferLayout.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\tests\TestClearColor.cpp" />
-    <ClCompile Include="src\tests\TestStringArt.cpp" />
+    <ClCompile Include="src\tests\TestFractal.cpp" />
     <ClCompile Include="src\tests\TestCamera.cpp" />
     <ClCompile Include="src\tests\TestGameObject.cpp" />
+    <ClCompile Include="src\tests\TestStringArt.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\GameObjectModel.h" />
+    <ClInclude Include="src\Light.h" />
     <ClInclude Include="src\GameObjectCube.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\GameObject.h" />
     <ClInclude Include="src\IndexBuffer.h" />
-    <ClInclude Include="src\MeshData.h" />
+    <ClInclude Include="src\Mesh.h" />
+    <ClInclude Include="src\Model.h" />
     <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\tests\Test.h" />
@@ -489,11 +497,19 @@
     <ClInclude Include="src\VertexBufferLayout.h" />
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\tests\TestClearColor.h" />
-    <ClInclude Include="src\tests\TestStringArt.h" />
+    <ClInclude Include="src\tests\TestFractal.h" />
     <ClInclude Include="src\tests\TestCamera.h" />
     <ClInclude Include="src\tests\TestGameObject.h" />
+    <ClInclude Include="src\tests\TestStringArt.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\shader\light.shaderg" />
+    <None Include="res\shader\modelpong.shaderg" />
+    <None Include="res\shader\pong.shaderg" />
+    <None Include="res\shader\basetex.shaderg" />
+    <None Include="res\shader\basic.shaderg" />
+    <None Include="res\shader\bbase.shaderg" />
+    <None Include="res\shader\mvp.shaderg" />
     <None Include="res\shader\tex.shaderg" />
     <None Include="src\vendor\glm\detail\func_common.inl" />
     <None Include="src\vendor\glm\detail\func_common_simd.inl" />
