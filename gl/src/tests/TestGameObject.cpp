@@ -1,17 +1,11 @@
 #include "TestGameObject.h"
-//#include "Renderer.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include <iostream>
 
 extern GLuint WIDTH, HEIGHT;
-//extern GLFWwindow* MainWindow;
 
-
-// Is called whenever a key is pressed/released via GLFW
-extern void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
-//GameObject rootObject;
 test::TestGameObject::~TestGameObject()
 {
     /*  GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC1_ALPHA));

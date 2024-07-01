@@ -1,6 +1,13 @@
 #include "GameObjectCube.h"
 #include "Renderer.h"
-
+extern struct MouseState {
+    bool buttons[GLFW_MOUSE_BUTTON_LAST];
+    double x, y;
+    double originX, originY;
+    double offsetX, offsetY;
+    bool last_state_click;
+};
+extern MouseState mouse_state;
 GameObjectCube::GameObjectCube(std::string n) : GameObject(n) {
     type = "Cube";
     name = name + "(" + type + ")";
@@ -62,14 +69,12 @@ GameObjectCube::GameObjectCube(std::string n) : GameObject(n) {
         20, 21, 22, 22, 23, 20,
     };
 
-    //m_Shader = std::make_unique<Shader>("res/shader/pong.shaderg");
-    //m_Shader = std::make_shared<Shader>("res/shader/pong.shaderg");
+
     m_Shader = ShaderManager::GetInstance().GetShader("res/shader/pong.shaderg");
     m_Shader_selected = ShaderManager::GetInstance().GetShader("res/shader/light.shaderg");
     m_VAO = std::make_unique<VertexArray>();
     m_IndexBuffer = std::make_unique<IndexBuffer>(indices, 36);
     m_VertexBuffer = std::make_unique<VertexBuffer>(vertices, 24 * 8 * sizeof(float));
-    //m_Texture = std::make_unique<Texture>("res/texture/ll.png");
     m_Texture = TextureManager::GetInstance().GetTexture("res/texture/ll.png");
     VertexBufferLayout vblayout;
     vblayout.Push<float>(3);
@@ -77,6 +82,14 @@ GameObjectCube::GameObjectCube(std::string n) : GameObject(n) {
     vblayout.Push<float>(3);
 
     m_VAO->AddBuffer(*m_VertexBuffer, vblayout);
+}
+void GameObjectCube::Update(float deltaTime)
+{
+    UpdateModelMatrix();
+    SelectedUpdate(deltaTime);
+    for (auto& child : m_Children) {
+        child->Update(deltaTime);
+    }
 }
 void GameObjectCube::Render(const glm::mat4& parentTransform, const glm::mat4& projection, const glm::mat4& view, const glm::vec3& lightPos, const glm::vec3& lightColor, const glm::vec3& viewPos){
 
@@ -113,6 +126,23 @@ void GameObjectCube::Render(const glm::mat4& parentTransform, const glm::mat4& p
         child->Render(globalTransform, projection, view, lightPos, lightColor, viewPos);
     }
 }
-void GameObjectCube::SelectedRender() {
+void GameObjectCube::SelectedUpdate(float deltaTime) {
+    
+    if (m_Selected) {
+        if (o_flag == false && mouse_state.buttons[GLFW_MOUSE_BUTTON_LEFT] == true) {
+            o_flag = true;
+            o_Position = m_Position;
+           
+        }
+        if(o_flag == true && mouse_state.buttons[GLFW_MOUSE_BUTTON_LEFT] == false){
+            o_flag = false;
+        }
+        if (mouse_state.buttons[GLFW_MOUSE_BUTTON_LEFT] == true) {
+            m_Position.y = o_Position.y - mouse_state.offsetY * 0.05f;
+        }
+        
+    }
+    
+    
     
 }

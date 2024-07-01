@@ -24,11 +24,21 @@
 
 // Function prototypes
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
-
+static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
 // Window dimensions
 GLuint WIDTH = 1000, HEIGHT = 1000;
 GLFWwindow* MainWindow;
 bool keys[1024];
+struct MouseState {
+    bool buttons[GLFW_MOUSE_BUTTON_LAST];
+    double x, y;
+    double originX, originY;
+    double offsetX, offsetY;
+    bool last_state_click;
+};
+
+MouseState mouse_state;
 GLFWwindow* env_init() {
     std::cout << "Starting GLFW context, OpenGL 4.3" << std::endl;
     GLint nrAttributes;
@@ -55,6 +65,8 @@ GLFWwindow* env_init() {
     glfwSwapInterval(1);
     // Set the required callback functions
     glfwSetKeyCallback(window, key_callback);
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
+    glfwSetCursorPosCallback(window, cursor_position_callback);
 
     // Set this to true so GLEW knows to use a modern approach to retrieving function pointers and extensions
     //glewExperimental = GL_TRUE;
@@ -71,9 +83,6 @@ GLFWwindow* env_init() {
     glViewport(0, 0, width, height);
 
 
-
-    
-
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -84,6 +93,10 @@ GLFWwindow* env_init() {
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     const char* glsl_version = "#version 130";
     ImGui_ImplOpenGL3_Init(glsl_version);
+
+    memset(mouse_state.buttons, 0, sizeof(mouse_state.buttons));
+    mouse_state.x = mouse_state.y = mouse_state.originX = mouse_state.originY = mouse_state.offsetX = mouse_state.offsetY = 0.0;
+    mouse_state.last_state_click = false;
     return window;
 }
 void test_framework(GLFWwindow* window)
@@ -136,7 +149,11 @@ void test_framework(GLFWwindow* window)
             currentTest->OnImGuiRender();
             ImGui::End();
         }
-
+        ImGui::Begin("Mouse State");
+        ImGui::Text("Mouse Position: (%.1f, %.1f)", mouse_state.x, mouse_state.y);
+        ImGui::Text("Left Button Pressed: %s", mouse_state.buttons[GLFW_MOUSE_BUTTON_LEFT] ? "Yes" : "No");
+        ImGui::Text("Mouse Offset: (%.1f, %.1f)", mouse_state.offsetX, mouse_state.offsetY);
+        ImGui::End();
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         
@@ -167,5 +184,36 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             keys[key] = true;
         else if (action == GLFW_RELEASE)
             keys[key] = false;
+    }
+}
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
+    if (button >= 0 && button < GLFW_MOUSE_BUTTON_LAST) {
+        if (action == GLFW_PRESS) {
+            mouse_state.buttons[button] = true;
+        }
+        else if (action == GLFW_RELEASE) {
+            mouse_state.buttons[button] = false;
+        }
+    }
+    
+}
+
+void cursor_position_callback(GLFWwindow* window, double xpos, double ypos) {
+    mouse_state.x = xpos;
+    mouse_state.y = ypos;
+    if (mouse_state.buttons[GLFW_MOUSE_BUTTON_LEFT] == true&& mouse_state.last_state_click == false) {//¸Õµã°´
+        mouse_state.last_state_click = true;
+        std::cout << "aaaaa";
+        mouse_state.originX = xpos;
+        mouse_state.originY = ypos;
+    }
+    if (mouse_state.buttons[GLFW_MOUSE_BUTTON_LEFT] == true) {
+        mouse_state.offsetX = xpos - mouse_state.originX;
+        mouse_state.offsetY = ypos - mouse_state.originY;
+    }
+    if (mouse_state.buttons[GLFW_MOUSE_BUTTON_LEFT] == false && mouse_state.last_state_click == true) {//¸ÕËÉ¿ª
+        mouse_state.last_state_click = false;
+        mouse_state.offsetX = mouse_state.offsetY = 0;
+        
     }
 }
