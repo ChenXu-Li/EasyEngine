@@ -66,8 +66,8 @@ void main()
 
  
 
-    //vec3 result = (ambient + diffuse + specular) * texColor1.xyz;
-     vec3 result = (ambient + diffuse + specular) * (1.0f,1.0f,1.0f);
+    vec3 result = (ambient + diffuse + specular) * texColor1.xyz;
+     //vec3 result = (ambient + diffuse + specular) * (1.0f,1.0f,1.0f);
      //vec3 result = texColor1.xyz;
     color = vec4(result, 1.0f);
     

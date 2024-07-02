@@ -1,6 +1,6 @@
 #include "Mesh.h"
 
-Mesh::Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vector<TextureInfo> texture)
+Mesh::Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vector<TextureInfo> textureinfos)
 {
     this->vertices = vertices;
     this->indices = indices;
@@ -27,6 +27,8 @@ void Mesh::Draw(Shader& shader)
         number = ss.str();
 
         shader.SetUniform1i("material." + name + number, i);
+
+        shader.SetUniform1i("u_Texture", i);
        // glUniform1f(glGetUniformLocation(shader.Program, ("material." + name + number).c_str()), i);
         glBindTexture(GL_TEXTURE_2D, this->textureinfos[i].id);
     }

@@ -12,7 +12,7 @@ GameObjectModel::GameObjectModel(std::string n) : GameObject(n) {
     //m_Shader = std::make_unique<Shader>("res/shader/modelpong.shaderg");
     m_Shader = ShaderManager::GetInstance().GetShader("res/shader/modelpong.shaderg");
    
-    m_model = Model("D:/littlecode/OpenglProjects/basegl/gl/res/model/Man.obj");
+    m_model = Model("D:/littlecode/OpenglProjects/basegl/gl/res/model/g/girl.obj");
     SetBoundingBox();
 }
 void GameObjectModel::Update(float deltaTime)

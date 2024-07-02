@@ -8,7 +8,6 @@ extern GLuint WIDTH, HEIGHT;
 extern MouseState mouse_state;
 test::TestGameObject::~TestGameObject()
 {
-
     GLCall(glDisable(GL_DEPTH_TEST));
 }
 test::TestGameObject::TestGameObject()
@@ -32,13 +31,10 @@ void test::TestGameObject::CreateScene()
    
     auto objectM = std::make_shared <GameObjectModel>("Man");
     objectM->SetPosition(glm::vec3(0.0f, 0.0f, 10.0f));
-    objectM->SetScale(glm::vec3(0.1f, 0.1f, 0.1f));
+    //objectM->SetScale(glm::vec3(0.1f, 0.1f, 0.1f));
     m_rootObject->AddChild(objectM);
-
-    //auto bb = std::make_shared<GameObjectCube>("ffff");
-    //bb->SetPosition(glm::vec3(-12.0f, 0.0f, 1.5f)); // 设置每个舞台块的位置
-    //bb->SetScale(glm::vec3(3.0f, 11.0f, 0.5f)); // 设置舞台块的大小为3x11x0.5
-    //m_rootObject->AddChild(bb);
+     
+    
      //创建对象 A
     auto objectA = std::make_shared<GameObject>("A");
     objectA->SetPosition(glm::vec3(-14.5f, 0.0f, 0.0f));

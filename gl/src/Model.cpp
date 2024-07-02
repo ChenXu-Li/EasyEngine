@@ -1,5 +1,6 @@
 #include "Model.h"
 #include"stb_image/stb_image.h"
+#include "TextureManager.h"
 Model::Model()
 {
 }
@@ -43,6 +44,7 @@ void Model::loadModel(std::string path)
     this->directory = path.substr(0, path.find_last_of('/'));
 
     this->processNode(scene->mRootNode, scene);
+    std::cout << meshes.size();
 }
 void Model::processNode(aiNode* node, const aiScene* scene)
 {
@@ -121,7 +123,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
     // Return a mesh object created from the extracted mesh data
     return Mesh(vertices, indices, textureinfos);
 }
-GLint TextureFromFile(const char* path, std::string directory);
+GLuint TextureFromFile(const char* path, std::string directory);
 std::vector<TextureInfo> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
 {
     std::vector<TextureInfo> textureinfos;
@@ -138,28 +140,41 @@ std::vector<TextureInfo> Model::loadMaterialTextures(aiMaterial* mat, aiTextureT
     }
     return textureinfos;
 }
-GLint TextureFromFile(const char* path, std::string directory)
+GLuint TextureFromFile(const char* path, std::string directory)
 {
     GLuint textureID;
     int m_Width, m_Height,m_Bpp;
     std::string filename = std::string(path);
+    std::cout << filename << std::endl;
     filename = directory + '/' + filename;
-    stbi_set_flip_vertically_on_load(1);
-    unsigned char* m_LocalBuffer;
-    m_LocalBuffer = stbi_load(path, &m_Width, &m_Height, &m_Bpp, 4);
-    GLCall(glGenTextures(1, &textureID));
-    GLCall(glBindTexture(GL_TEXTURE_2D, textureID));
+    std::cout << filename << std::endl;
 
-    GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-    GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-    GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT));
-    GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT));
-
-    GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, m_LocalBuffer));
-    GLCall(glBindTexture(GL_TEXTURE_2D, 0));
-
-    if (m_LocalBuffer) {//上传GPU后删除内存中的纹理数据
-        stbi_image_free(m_LocalBuffer);
+    std::string::size_type pos = 0;
+    while ((pos = filename.find("\\\\", pos)) != std::string::npos) {
+        filename.replace(pos, 2, "/");
+        pos += 1; // Move past the replaced part
     }
+
+    std::cout << filename << std::endl;
+
+    auto t = TextureManager::GetInstance().GetTexture(filename);
+    textureID = t->GetID();
+    //stbi_set_flip_vertically_on_load(1);
+    //unsigned char* m_LocalBuffer;
+    //m_LocalBuffer = stbi_load(path, &m_Width, &m_Height, &m_Bpp, 4);
+    //GLCall(glGenTextures(1, &textureID));
+    //GLCall(glBindTexture(GL_TEXTURE_2D, textureID));
+
+    //GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+    //GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+    //GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT));
+    //GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT));
+
+    //GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, m_LocalBuffer));
+    //GLCall(glBindTexture(GL_TEXTURE_2D, 0));
+
+    //if (m_LocalBuffer) {//上传GPU后删除内存中的纹理数据
+    //    stbi_image_free(m_LocalBuffer);
+    //}
     return textureID;
 }
