@@ -111,15 +111,15 @@
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\GLEW\include;src\vendor;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\SFML\include;$(SolutionDir)Dependencies\FFTW\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\Assimp\include;$(SolutionDir)Dependencies\GLEW\include;src\vendor;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\SFML\include;$(SolutionDir)Dependencies\FFTW\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PreprocessorDefinitions>GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\GLEW\lib;$(SolutionDir)Dependencies\SFML\lib;$(SolutionDir)Dependencies\GLFW\lib;$(SolutionDir)Dependencies\FFTW\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32s.lib;glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib;sfml-system.lib;sfml-window.lib;sfml-graphics.lib;openal32.lib;flac.lib;vorbisenc.lib;vorbisfile.lib;vorbis.lib;ogg.lib;winmm.lib;sfml-audio.lib;libfftw3-3.lib;freetype.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\Assimp\lib;$(SolutionDir)Dependencies\GLEW\lib;$(SolutionDir)Dependencies\SFML\lib;$(SolutionDir)Dependencies\GLFW\lib;$(SolutionDir)Dependencies\FFTW\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32s.lib;glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib;sfml-system.lib;sfml-window.lib;sfml-graphics.lib;openal32.lib;flac.lib;vorbisenc.lib;vorbisfile.lib;vorbis.lib;ogg.lib;winmm.lib;sfml-audio.lib;libfftw3-3.lib;freetype.lib;assimp-vc143-mt.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -158,7 +158,6 @@
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\tests\Test.cpp" />
     <ClCompile Include="src\tests\TestMatrix.cpp" />
-    <ClCompile Include="src\tests\TestMusicFFT.cpp" />
     <ClCompile Include="src\tests\TestTexture2d.cpp" />
     <ClCompile Include="src\vendor\glm\detail\glm.cpp" />
     <ClCompile Include="src\vendor\glm\glm.cppm" />
@@ -182,6 +181,7 @@
     <ClCompile Include="src\TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ControlState.h" />
     <ClInclude Include="src\ShaderManager.h" />
     <ClInclude Include="src\GameObjectModel.h" />
     <ClInclude Include="src\Light.h" />
@@ -195,8 +195,8 @@
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\tests\Test.h" />
     <ClInclude Include="src\tests\TestMatrix.h" />
-    <ClInclude Include="src\tests\TestMusicFFT.h" />
     <ClInclude Include="src\tests\TestTexture2d.h" />
+    <ClInclude Include="src\Transform.h" />
     <ClInclude Include="src\vendor\glm\common.hpp" />
     <ClInclude Include="src\vendor\glm\detail\compute_common.hpp" />
     <ClInclude Include="src\vendor\glm\detail\compute_vector_decl.hpp" />

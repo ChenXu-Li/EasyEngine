@@ -1,29 +1,28 @@
 #pragma once
-#define GLFW_MOUSE_BUTTON_1         0
-#define GLFW_MOUSE_BUTTON_2         1
-#define GLFW_MOUSE_BUTTON_3         2
-#define GLFW_MOUSE_BUTTON_4         3
-#define GLFW_MOUSE_BUTTON_5         4
-#define GLFW_MOUSE_BUTTON_6         5
-#define GLFW_MOUSE_BUTTON_7         6
-#define GLFW_MOUSE_BUTTON_8         7
-#define GLFW_MOUSE_BUTTON_LAST      GLFW_MOUSE_BUTTON_8
-#define GLFW_MOUSE_BUTTON_LEFT      GLFW_MOUSE_BUTTON_1
-#define GLFW_MOUSE_BUTTON_RIGHT     GLFW_MOUSE_BUTTON_2
-#define GLFW_MOUSE_BUTTON_MIDDLE    GLFW_MOUSE_BUTTON_3
+#include "ControlState.h"
 #include <vector>
 #include<string>
 #include <memory>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "ShaderManager.h"
-//#include "Shader.h"
 #include "VertexArray.h"
 #include "IndexBuffer.h"
 #include "VertexBuffer.h"
 #include "VertexBufferLayout.h"
-//#include"Texture.h"
 #include "TextureManager.h"
+#include "Transform.h"
+extern MouseState mouse_state;
+extern GLuint WIDTH, HEIGHT;
+extern bool keys[1024];
+struct BoundingBox {
+    float UP_Y;
+    float Down_Y;
+    float Right_X;
+    float Left_X;
+    float Front_Z;
+    float Back_Z;
+};
 class GameObject {
 public:
     GameObject(std::string n = "default");
@@ -47,22 +46,20 @@ protected:
     glm::vec3 m_Position;
     glm::vec3 m_Rotation;
     glm::vec3 m_Scale;
-
-    glm::vec3 o_Position;
-    bool o_flag;
+    BoundingBox m_boundingBox;
+    glm::vec3 o_Position;//跟随鼠标移动时的原点
+    bool o_flag;//跟随鼠标移动开始标志
 
     glm::mat4 m_ModelMatrix;
+    glm::mat4 m_ParentMatrix;
+    glm::mat4 g_ViewMatrix;
+    glm::mat4 g_ProjectionMatrix;
 
     std::vector<std::shared_ptr<GameObject>> m_Children;
 
-    // Graphics resources
-    //std::unique_ptr<Shader> m_Shader;
-    std::shared_ptr<Shader> m_Shader;
-    //std::unique_ptr<Texture> m_Texture;
-    std::shared_ptr<Texture> m_Texture;
-    std::unique_ptr<VertexArray> m_VAO;
-    std::unique_ptr<IndexBuffer> m_IndexBuffer;
-    std::unique_ptr<VertexBuffer> m_VertexBuffer;
-
     void UpdateModelMatrix();
+    void SelectState2AllChild(bool selfstate);
+    bool CheckInside();
+    void CursorChoose();
+    virtual void SetBoundingBox();
 };

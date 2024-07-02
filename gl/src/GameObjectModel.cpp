@@ -12,10 +12,21 @@ GameObjectModel::GameObjectModel(std::string n) : GameObject(n) {
     //m_Shader = std::make_unique<Shader>("res/shader/modelpong.shaderg");
     m_Shader = ShaderManager::GetInstance().GetShader("res/shader/modelpong.shaderg");
    
-    m_model = Model("D:/littlecode/OpenglProjects/basegl/gl/res/model/man.obj");
-
+    m_model = Model("D:/littlecode/OpenglProjects/basegl/gl/res/model/Man.obj");
+    SetBoundingBox();
+}
+void GameObjectModel::Update(float deltaTime)
+{
+    UpdateModelMatrix();
+    CursorChoose();
+    for (auto& child : m_Children) {
+        child->Update(deltaTime);
+    }
 }
 void GameObjectModel::Render(const glm::mat4& parentTransform, const glm::mat4& projection, const glm::mat4& view, const glm::vec3& lightPos, const glm::vec3& lightColor, const glm::vec3& viewPos) {
+    m_ParentMatrix = parentTransform;
+    g_ViewMatrix = view;
+    g_ProjectionMatrix = projection;
 
     glm::mat4 globalTransform = parentTransform * m_ModelMatrix;
 
@@ -41,4 +52,18 @@ void GameObjectModel::Render(const glm::mat4& parentTransform, const glm::mat4& 
     for (auto& child : m_Children) {
         child->Render(globalTransform, projection, view, lightPos, lightColor, viewPos);
     }
+}
+
+void GameObjectModel::SetBoundingBox()
+{
+    //找到个方向最值
+    float t_max_x, t_min_x, t_max_y, t_min_y, t_max_z, t_min_z;
+    m_model.FindBestValue(t_max_x, t_min_x, t_max_y, t_min_y, t_max_z, t_min_z);
+    m_boundingBox.Right_X = t_max_x;
+    m_boundingBox.Left_X = t_min_x;
+    m_boundingBox.UP_Y = t_max_y;
+    m_boundingBox.Down_Y = t_min_y;
+    m_boundingBox.Front_Z = t_max_z;
+    m_boundingBox.Back_Z = t_min_z;
+    std::cout << t_max_x<<" " << t_min_x << " " << t_max_y << " " << t_min_y << " " << t_max_z << " " << t_min_z<<std::endl;;
 }

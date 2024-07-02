@@ -23,6 +23,7 @@ public:
     std::vector<TextureInfo> textureinfos;
     Mesh(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vector<TextureInfo> texture);
     void Draw(Shader& shader);
+    void FindBestValue(float& max_x, float& min_x, float& max_y, float& min_y, float& max_z, float& min_z);
 
 private:
     GLuint VAO, VBO, EBO;

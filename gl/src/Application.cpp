@@ -2,26 +2,26 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "renderer.h"
-#include "IndexBuffer.h"
-#include "VertexBuffer.h"
-#include "VertexArray.h"
-#include "VertexBufferLayout.h"
-#include "Shader.h"
-#include "Texture.h"
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
+//#include "IndexBuffer.h"
+//#include "VertexBuffer.h"
+//#include "VertexArray.h"
+//#include "VertexBufferLayout.h"
+//#include "Shader.h"
+//#include "Texture.h"
+//#include "glm/glm.hpp"
+//#include "glm/gtc/matrix_transform.hpp"
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "tests/TestClearColor.h"
 #include "tests/TestTexture2d.h"
 #include "tests/TestMatrix.h"
-#include "tests/TestMusicFFT.h"
+//#include "tests/TestMusicFFT.h"
 #include "tests/TestFractal.h"
 #include "tests/TestStringArt.h"
 #include "tests/TestCamera.h"
 #include "tests/TestGameObject.h"
-
+#include "ControlState.h"
 // Function prototypes
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
@@ -30,15 +30,8 @@ static void cursor_position_callback(GLFWwindow* window, double xpos, double ypo
 GLuint WIDTH = 1000, HEIGHT = 1000;
 GLFWwindow* MainWindow;
 bool keys[1024];
-struct MouseState {
-    bool buttons[GLFW_MOUSE_BUTTON_LAST];
-    double x, y;
-    double originX, originY;
-    double offsetX, offsetY;
-    bool last_state_click;
-};
-
 MouseState mouse_state;
+
 GLFWwindow* env_init() {
     std::cout << "Starting GLFW context, OpenGL 4.3" << std::endl;
     GLint nrAttributes;
@@ -82,6 +75,8 @@ GLFWwindow* env_init() {
     glfwGetFramebufferSize(window, &width, &height);
     glViewport(0, 0, width, height);
 
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -109,7 +104,7 @@ void test_framework(GLFWwindow* window)
     testMenu->RegisterTest<test::TestClearColor>("Test Clear Color");
     testMenu->RegisterTest<test::TestTexture2d>("Test Texture Combine");
     testMenu->RegisterTest<test::TestMatrix>("Test Matrix Transfer");
-    testMenu->RegisterTest<test::TestMusicFFT>("Test Music FFT");
+    //testMenu->RegisterTest<test::TestMusicFFT>("Test Music FFT");
     testMenu->RegisterTest<test::TestFractal>("Test Fractal");
     testMenu->RegisterTest<test::TestStringArt>("Test StringArt");
     testMenu->RegisterTest<test::TestCamera>("Test Camera");
@@ -127,7 +122,8 @@ void test_framework(GLFWwindow* window)
         // Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
         glfwPollEvents();
         GLCall(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
-        GLCall(glClear(GL_COLOR_BUFFER_BIT));
+        //GLCall(glClear(GL_COLOR_BUFFER_BIT));
+        GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
         currentTime = glfwGetTime();
         deltaTime = static_cast<float>(currentTime - lastTime);
@@ -151,6 +147,7 @@ void test_framework(GLFWwindow* window)
         }
         ImGui::Begin("Mouse State");
         ImGui::Text("Mouse Position: (%.1f, %.1f)", mouse_state.x, mouse_state.y);
+        ImGui::Text("Mouse Position ZBuffer: (%.8f)", mouse_state.z_buffer);
         ImGui::Text("Left Button Pressed: %s", mouse_state.buttons[GLFW_MOUSE_BUTTON_LEFT] ? "Yes" : "No");
         ImGui::Text("Mouse Offset: (%.1f, %.1f)", mouse_state.offsetX, mouse_state.offsetY);
         ImGui::End();
@@ -201,6 +198,10 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos) {
     mouse_state.x = xpos;
     mouse_state.y = ypos;
+    float z_value;
+    GLCall(glReadPixels(int(xpos), int(HEIGHT - ypos), 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &z_value));
+    mouse_state.z_buffer = z_value;
+
     if (mouse_state.buttons[GLFW_MOUSE_BUTTON_LEFT] == true&& mouse_state.last_state_click == false) {//�յ㰴
         mouse_state.last_state_click = true;
         std::cout << "aaaaa";

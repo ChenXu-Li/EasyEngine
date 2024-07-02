@@ -53,6 +53,8 @@ void Camera::OnRender()
 
 void Camera::OnImGuiRender()
 {
+    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.7f, 0.2f, 1.0f));
+    ImGui::SetNextItemOpen(true, ImGuiCond_Once);
     if (ImGui::TreeNode("Camera Arg")) {
         ImGui::SetNextItemOpen(true, ImGuiCond_Once);
         if (ImGui::TreeNode("Camera Position"))
@@ -69,7 +71,7 @@ void Camera::OnImGuiRender()
 
             ImGui::TreePop();
         }
-
+        ImGui::SetNextItemOpen(true, ImGuiCond_Once);
         // 显示相机角度
         if (ImGui::TreeNode("Camera Angle"))
         {
@@ -97,7 +99,7 @@ void Camera::OnImGuiRender()
             ImGui::EndGroup();
             ImGui::TreePop();
         }
-
+        ImGui::SetNextItemOpen(true, ImGuiCond_Once);
         // 显示相机速度
         if (ImGui::TreeNode("Camera Speed"))
         {
@@ -105,7 +107,7 @@ void Camera::OnImGuiRender()
             ImGui::DragFloat("Rotation Speed", &RotateSpeed, 0.1f, 0.0f, 60.0f);
             ImGui::TreePop();
         }
-
+        ImGui::SetNextItemOpen(false, ImGuiCond_Once);
         // 显示相机缩放
         if (ImGui::TreeNode("Camera Zoom"))
         {
@@ -114,7 +116,7 @@ void Camera::OnImGuiRender()
         }
         ImGui::TreePop();
     }
-
+    ImGui::PopStyleColor(1);
 
 }
 

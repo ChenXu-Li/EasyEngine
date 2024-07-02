@@ -38,6 +38,27 @@ void Mesh::Draw(Shader& shader)
     glBindVertexArray(0);
 }
 
+void Mesh::FindBestValue(float& max_x, float& min_x, float& max_y, float& min_y, float& max_z, float& min_z)
+{
+    // 初始化最大最小值
+    max_x = min_x = this->vertices[0].Position.x;
+    max_y = min_y = this->vertices[0].Position.y;
+    max_z = min_z = this->vertices[0].Position.z;
+
+    for (const auto& vertex : this->vertices)
+    {
+        // 更新最大最小值
+        if (vertex.Position.x > max_x) max_x = vertex.Position.x;
+        if (vertex.Position.x < min_x) min_x = vertex.Position.x;
+
+        if (vertex.Position.y > max_y) max_y = vertex.Position.y;
+        if (vertex.Position.y < min_y) min_y = vertex.Position.y;
+
+        if (vertex.Position.z > max_z) max_z = vertex.Position.z;
+        if (vertex.Position.z < min_z) min_z = vertex.Position.z;
+    }
+}
+
 void Mesh::setupMesh()
 {
     glGenVertexArrays(1, &this->VAO);

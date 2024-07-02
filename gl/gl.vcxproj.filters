@@ -81,9 +81,6 @@
     <ClCompile Include="src\tests\TestMatrix.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\tests\TestMusicFFT.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\tests\TestFractal.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -1055,9 +1052,6 @@
     <ClInclude Include="src\tests\TestMatrix.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\tests\TestMusicFFT.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="src\tests\TestFractal.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -1095,6 +1089,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\TextureManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ControlState.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Transform.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

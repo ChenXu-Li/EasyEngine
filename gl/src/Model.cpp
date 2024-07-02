@@ -12,6 +12,24 @@ void Model::Draw(Shader& shader)
 	for (GLuint i = 0; i < this->meshes.size(); i++)
 		this->meshes[i].Draw(shader);
 }
+void Model::FindBestValue(float& max_x, float& min_x, float& max_y, float& min_y, float& max_z, float& min_z)
+{
+    float t_max_x, t_min_x, t_max_y, t_min_y, t_max_z, t_min_z;
+    for (GLuint i = 0; i < this->meshes.size(); i++) {
+        meshes[i].FindBestValue(t_max_x, t_min_x, t_max_y, t_min_y, t_max_z, t_min_z);
+        // 更新全局最大值
+        if (t_max_x > max_x) max_x = t_max_x;
+        if (t_max_y > max_y) max_y = t_max_y;
+        if (t_max_z > max_z) max_z = t_max_z;
+
+        // 更新全局最小值
+        if (t_min_x < min_x) min_x = t_min_x;
+        if (t_min_y < min_y) min_y = t_min_y;
+        if (t_min_z < min_z) min_z = t_min_z;
+    }
+   
+
+}
 void Model::loadModel(std::string path)
 {
     Assimp::Importer import;

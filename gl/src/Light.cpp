@@ -100,8 +100,10 @@ void Light::Render(const glm::mat4& parentTransform, const glm::mat4& projection
 
 void Light::ImGuiRender()
 {
+    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(m_LightColor.x, m_LightColor.y, m_LightColor.z, 1.0f));
+    ImGui::SetNextItemOpen(true, ImGuiCond_Once);
     if (ImGui::TreeNode("Light")) {
-        
+        ImGui::SetNextItemOpen(true, ImGuiCond_Once);
         if (ImGui::TreeNode("Light Position"))
         {
             ImGui::BeginGroup();
@@ -116,16 +118,16 @@ void Light::ImGuiRender()
 
             ImGui::TreePop();
         }
+        ImGui::SetNextItemOpen(true, ImGuiCond_Once);
         if (ImGui::TreeNode("Light Color"))
         {
             ImGui::ColorEdit4("clear color", (float*)&m_LightColor);
 
             ImGui::TreePop();
-        }
-
-        
+        }  
         ImGui::TreePop();
     }
+    ImGui::PopStyleColor(1);
 }
 
 void Light::UpdateModelMatrix()

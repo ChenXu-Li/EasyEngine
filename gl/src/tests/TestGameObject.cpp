@@ -3,23 +3,19 @@
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include <iostream>
-
+#include "Transform.h"
 extern GLuint WIDTH, HEIGHT;
-
+extern MouseState mouse_state;
 test::TestGameObject::~TestGameObject()
 {
-    /*  GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC1_ALPHA));
-      GLCall(glEnable(GL_BLEND));*/
+
     GLCall(glDisable(GL_DEPTH_TEST));
 }
 test::TestGameObject::TestGameObject()
 {
-   /* GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC1_ALPHA));
-    GLCall(glEnable(GL_BLEND));*/
     GLCall(glEnable(GL_DEPTH_TEST));
-
+    GLCall(glDepthFunc(GL_LESS));
     CreateScene();
-
 }
 
 void test::TestGameObject::CreateScene()
@@ -33,17 +29,22 @@ void test::TestGameObject::CreateScene()
     m_rootObject->SetPosition(glm::vec3(0.0f, 0.0f, -1.0f));
 
  
-
+   
     auto objectM = std::make_shared <GameObjectModel>("Man");
     objectM->SetPosition(glm::vec3(0.0f, 0.0f, 10.0f));
     objectM->SetScale(glm::vec3(0.1f, 0.1f, 0.1f));
     m_rootObject->AddChild(objectM);
-    // 创建对象 A
+
+    //auto bb = std::make_shared<GameObjectCube>("ffff");
+    //bb->SetPosition(glm::vec3(-12.0f, 0.0f, 1.5f)); // 设置每个舞台块的位置
+    //bb->SetScale(glm::vec3(3.0f, 11.0f, 0.5f)); // 设置舞台块的大小为3x11x0.5
+    //m_rootObject->AddChild(bb);
+     //创建对象 A
     auto objectA = std::make_shared<GameObject>("A");
     objectA->SetPosition(glm::vec3(-14.5f, 0.0f, 0.0f));
     m_rootObject->AddChild(objectA);
 
-    // 在对象 A 下创建29个1x12x1的方块
+     //在对象 A 下创建29个1x12x1的方块
     for (int i = 0; i < 29; ++i) {
         auto cube = std::make_shared<GameObjectCube>("A_" + std::to_string(i + 1));
         cube->SetPosition(glm::vec3(1.0f * i, 6.0f, 0.0f)); // 设置每个方块的位置
@@ -58,7 +59,7 @@ void test::TestGameObject::CreateScene()
 
     // 创建对象 B1
     auto objectB1 = std::make_shared<GameObject>("B1");
-    objectB1->SetPosition(glm::vec3(-4.5f, -2.5f, 3.0f));
+    objectB1->SetPosition(glm::vec3(-4.5f, -2.5f, 5.0f));
     objectB->AddChild(objectB1);
 
     // 在对象 B1 下创建 10 排 9 列 1x5x1 的舞台块
@@ -72,7 +73,7 @@ void test::TestGameObject::CreateScene()
     }
     // 创建对象 B2
     auto objectB2 = std::make_shared<GameObject>("B2");
-    objectB2->SetPosition(glm::vec3(-7.5f, -1.5f, 0.0f));
+    objectB2->SetPosition(glm::vec3(-7.5f, -1.5f, 1.0f));
     objectB->AddChild(objectB2);
 
     // 在对象 B2 下创建 4 排 15 列 1x3x1 的舞台块
@@ -85,7 +86,7 @@ void test::TestGameObject::CreateScene()
         }
     }
 
-    // 创建对象 C
+     //创建对象 C
     auto objectC = std::make_shared<GameObject>("C");
     objectC->SetPosition(glm::vec3(0.0f, 5.5f, 2.0f));
     m_rootObject->AddChild(objectC);
@@ -135,6 +136,11 @@ void test::TestGameObject::OnRender()
 void test::TestGameObject::OnImGuiRender()
 {
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    ImGui::Text("Mouse Position: (%.1f, %.1f)", mouse_state.x, mouse_state.y);
+    ImGui::Text("Mouse Position ZBuffer: (%.8f)", mouse_state.z_buffer);
+    glm::vec3 temp = ScreenToModel::screenToWorld(mouse_state.x, mouse_state.y, mouse_state.z_buffer, WIDTH, HEIGHT, m_projection, m_view);
+    ImGui::Text("Point World Position: (%.1f, %.1f,  %.1f)", temp.x, temp.y, temp.z);
+
 
     ImGui::SetNextItemOpen(true, ImGuiCond_Once);
     m_camera.OnImGuiRender();

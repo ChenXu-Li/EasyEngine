@@ -1,13 +1,9 @@
 #include "GameObjectCube.h"
 #include "Renderer.h"
-extern struct MouseState {
-    bool buttons[GLFW_MOUSE_BUTTON_LAST];
-    double x, y;
-    double originX, originY;
-    double offsetX, offsetY;
-    bool last_state_click;
-};
-extern MouseState mouse_state;
+
+//extern MouseState mouse_state;
+//extern GLuint WIDTH, HEIGHT;
+//extern bool keys[1024];
 GameObjectCube::GameObjectCube(std::string n) : GameObject(n) {
     type = "Cube";
     name = name + "(" + type + ")";
@@ -80,12 +76,14 @@ GameObjectCube::GameObjectCube(std::string n) : GameObject(n) {
     vblayout.Push<float>(3);
     vblayout.Push<float>(2);
     vblayout.Push<float>(3);
-
     m_VAO->AddBuffer(*m_VertexBuffer, vblayout);
+    SetBoundingBox();
+    o_flag = false;
 }
 void GameObjectCube::Update(float deltaTime)
 {
     UpdateModelMatrix();
+   CursorChoose();
     SelectedUpdate(deltaTime);
     for (auto& child : m_Children) {
         child->Update(deltaTime);
@@ -93,8 +91,11 @@ void GameObjectCube::Update(float deltaTime)
 }
 void GameObjectCube::Render(const glm::mat4& parentTransform, const glm::mat4& projection, const glm::mat4& view, const glm::vec3& lightPos, const glm::vec3& lightColor, const glm::vec3& viewPos){
 
-    glm::mat4 globalTransform = parentTransform * m_ModelMatrix;
+    m_ParentMatrix = parentTransform;
+    g_ViewMatrix = view;
+    g_ProjectionMatrix = projection;
 
+    glm::mat4 globalTransform = parentTransform * m_ModelMatrix;
     m_Shader->Bind();
     m_Shader->SetUniformMat4fv("projection", projection);
     m_Shader->SetUniformMat4fv("view", view);
@@ -128,7 +129,7 @@ void GameObjectCube::Render(const glm::mat4& parentTransform, const glm::mat4& p
 }
 void GameObjectCube::SelectedUpdate(float deltaTime) {
     
-    if (m_Selected) {
+    if (m_Selected && keys[GLFW_KEY_LEFT_CONTROL] == false) {
         if (o_flag == false && mouse_state.buttons[GLFW_MOUSE_BUTTON_LEFT] == true) {
             o_flag = true;
             o_Position = m_Position;
@@ -138,11 +139,11 @@ void GameObjectCube::SelectedUpdate(float deltaTime) {
             o_flag = false;
         }
         if (mouse_state.buttons[GLFW_MOUSE_BUTTON_LEFT] == true) {
-            m_Position.y = o_Position.y - mouse_state.offsetY * 0.05f;
+            m_Position.y = o_Position.y - float(mouse_state.offsetY) * 0.05f;
         }
         
-    }
-    
-    
-    
+    }  
+}
+void GameObjectCube::SetBoundingBox() {
+    m_boundingBox = { 0.5f, -0.5f, 0.5f, -0.5f, 0.5f, -0.5f };
 }

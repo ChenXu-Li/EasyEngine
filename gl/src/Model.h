@@ -11,6 +11,7 @@ public:
     Model(const std::string& path);
     
     void Draw(Shader& shader);
+    void FindBestValue(float& max_x, float& min_x, float& max_y, float& min_y, float& max_z, float& min_z);
 private:
     /*  模型数据  */
     std::vector<Mesh> meshes;
