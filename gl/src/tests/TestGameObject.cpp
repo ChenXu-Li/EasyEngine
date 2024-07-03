@@ -1,47 +1,49 @@
 #include "TestGameObject.h"
-#include "Renderer.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include <iostream>
+#include "Transform.h"
+
 #include<random>
+
 extern GLuint WIDTH, HEIGHT;
-//extern GLFWwindow* MainWindow;
-
-
-// Is called whenever a key is pressed/released via GLFW
-extern void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
-//GameObject rootObject;
+extern MouseState mouse_state;
 test::TestGameObject::~TestGameObject()
 {
-    /*  GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC1_ALPHA));
-      GLCall(glEnable(GL_BLEND));*/
     GLCall(glDisable(GL_DEPTH_TEST));
 }
 test::TestGameObject::TestGameObject()
 {
-   /* GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC1_ALPHA));
-    GLCall(glEnable(GL_BLEND));*/
     GLCall(glEnable(GL_DEPTH_TEST));
-
+    GLCall(glDepthFunc(GL_LESS));
     CreateScene();
-
 }
 
 void test::TestGameObject::CreateScene()
 {
     m_camera = Camera(glm::vec3(0.0f, 30.0f, 30.0f));
+    m_light = Light("light");
+    m_light.SetPosition(glm::vec3(0.0f, 20.0f, 0.0f));
+    m_light.SetLightColor(glm::vec3(1.0f, 1.0f, 1.0f));
 
     m_rootObject = std::make_unique<GameObject>("SceneRoot");
     m_rootObject->SetPosition(glm::vec3(0.0f, 0.0f, -1.0f));
 
-
-    // 创建对象 A
+ 
+/*创建
+    auto objectM = std::make_shared <GameObjectModel>("Man");
+    objectM->SetPosition(glm::vec3(0.0f, 0.0f, 10.0f));
+    //objectM->SetScale(glm::vec3(0.1f, 0.1f, 0.1f));
+    m_rootObject->AddChild(objectM);
+     
+ */   
+     //创建对象 A
     auto objectA = std::make_shared<GameObject>("A");
     objectA->SetPosition(glm::vec3(-14.5f, 0.0f, 0.0f));
     m_rootObject->AddChild(objectA);
 
-    // 在对象 A 下创建29个1x12x1的方块
+     //在对象 A 下创建29个1x12x1的方块
     for (int i = 0; i < 29; ++i) {
         auto cube = std::make_shared<GameObjectCube>("A_" + std::to_string(i + 1));
         cube->SetPosition(glm::vec3(1.0f * i, 6.0f, 0.0f)); // 设置每个方块的位置
@@ -56,13 +58,10 @@ void test::TestGameObject::CreateScene()
 
     // 创建对象 B1
     auto objectB1 = std::make_shared<GameObject>("B1");
-    objectB1->SetPosition(glm::vec3(-4.5f, -2.5f, 3.0f));
+    objectB1->SetPosition(glm::vec3(-4.5f, -2.5f, 5.0f));
     objectB->AddChild(objectB1);
 
     // 在对象 B1 下创建 10 排 9 列 1x5x1 的舞台块
-
-
-    //坐标边界    左右边界 0--8.0    前后边界 0--9.0
     for (int i = 0; i < 10; ++i) {
         for (int j = 0; j < 9; ++j) {
             auto stageBlock = std::make_shared<GameObjectCube>("B1_" + std::to_string(i) + "_" + std::to_string(j));
@@ -73,7 +72,7 @@ void test::TestGameObject::CreateScene()
     }
     // 创建对象 B2
     auto objectB2 = std::make_shared<GameObject>("B2");
-    objectB2->SetPosition(glm::vec3(-7.5f, -1.5f, 0.0f));
+    objectB2->SetPosition(glm::vec3(-7.5f, -1.5f, 1.0f));
     objectB->AddChild(objectB2);
 
     // 在对象 B2 下创建 4 排 15 列 1x3x1 的舞台块
@@ -86,7 +85,7 @@ void test::TestGameObject::CreateScene()
         }
     }
 
-    // 创建对象 C
+     //创建对象 C
     auto objectC = std::make_shared<GameObject>("C");
     objectC->SetPosition(glm::vec3(0.0f, 5.5f, 2.0f));
     m_rootObject->AddChild(objectC);
@@ -103,25 +102,25 @@ void test::TestGameObject::CreateScene()
         auto stageBlockRight = std::make_shared<GameObjectCube>("C_Right_" + std::to_string(i));
         stageBlockRight->SetPosition(glm::vec3(12.0f, 0.0f, 1.5f * i)); // 设置每个舞台块的位置
         stageBlockRight->SetScale(glm::vec3(3.0f, 11.0f, 0.5f)); // 设置舞台块的大小为3x11x0.5
-        
         objectC->AddChild(stageBlockRight);
     }
    
 
 
 
+
     ///************************************************************
     // 创建对象 D
     auto objectD = std::make_shared<GameObject>("D");
-    objectD->SetPosition(glm::vec3(0.0f, 5.5f, 2.0f));
+    objectD->SetPosition(glm::vec3(0.0f,0.0f, 2.0f));
     m_rootObject->AddChild(objectD);
 
     // 假设你有一个常量来表示圆的半径和方块的数量
-        const float radius = 3.0f; // 圆的半径  
+    const float radius = 3.0f; // 圆的半径  
     const int numBlocks = 16; // 方块的数量  
     const float angleIncrement = 2.0f * glm::pi<float>() / numBlocks; // 每个方块之间的角度增量  
 
- 
+
 
     // ... (之前的代码保持不变)  
 
@@ -131,16 +130,20 @@ void test::TestGameObject::CreateScene()
         float angle = i * angleIncrement;
 
         // 创建舞台块  
-        auto stageBlock = std::make_shared<GameObjectCube>("D_Block_" + std::to_string(i));
+        auto stageBlock = std::make_shared <GameObjectModel>("Man" + std::to_string(i));
+       // auto stageBlock = std::make_shared<GameObjectCube>("D_Block_" + std::to_string(i));
         my_Actors.emplace_back(stageBlock);
         // 计算舞台块在圆上的位置（x和y坐标）  
-        glm::vec3 circlePosition(radius * std::cos(angle),0.0f , radius * std::sin(angle)); // z坐标为0，确保环形在xy平面上  
+        glm::vec3 circlePosition(radius * std::cos(angle), 0.0f, radius * std::sin(angle)); // z坐标为0，确保环形在xy平面上  
 
         // 设置每个舞台块的位置（这里我们可能想要让方块稍微升高一点，以便它们不会重叠到地面）  
         stageBlock->SetPosition(circlePosition + glm::vec3(0.0f, -3.0f, 3.0f)); // 假设y轴向上，这里+0.5f是为了让方块稍微离开地面  
-        
-        
+
+
         vec3Array[i] = circlePosition + glm::vec3(0.0f, 0.0f, 3.0f);
+
+        vec3Angle[i] = glm::vec3(0.0f, 0.0f,0.0f);
+
         // 设置舞台块的大小（注意：SetScale中的值看起来像是缩放因子，而不是直接的大小）  
         stageBlock->SetScale(glm::vec3(0.5f, 0.5f, 0.5f)); // 假设这是缩放因子，不是直接大小  
 
@@ -152,11 +155,11 @@ void test::TestGameObject::CreateScene()
         objectD->AddChild(stageBlock);
     }
 
- //printf("我被回调了");
-        ///************************************************************
+    //printf("我被回调了");
+           ///************************************************************
+
 
 }
-
 
 
 
@@ -200,8 +203,9 @@ void resolveCollision(glm::vec3& a, glm::vec3& b, float cubeSize) {
 void test::TestGameObject::OnUpdate(float deltaTime)
 {
     m_camera.OnUpdate(deltaTime);
+    m_light.Update(deltaTime);
  
-    m_model = glm::rotate(m_model, glm::radians(0.5f), glm::vec3(0.0, 0.0, 1.0));
+   // m_model = glm::rotate(m_model, glm::radians(0.5f), glm::vec3(0.0, 0.0, 1.0));
 
     m_view = m_camera.GetViewMatrix();
 
@@ -209,7 +213,6 @@ void test::TestGameObject::OnUpdate(float deltaTime)
 
     m_rootObject->Update(deltaTime);
 
-    
 
     ///************************************************************
     // 更新经过的时间  
@@ -224,35 +227,43 @@ void test::TestGameObject::OnUpdate(float deltaTime)
 
         return;
 
-
+    step++;
     for (int i = 0; i < 16; i++) {
-        // 设置随机种子（可选，通常基于当前时间）  
-        std::random_device rd;
-        std::mt19937 gen(rd());
 
-        // 创建一个在[0.0, 1.0)之间的均匀分布  
-        std::uniform_real_distribution<> dis(-1.0f, 1.0f);
+        //更新
+        if (step % step_action == 0) {
+            // 设置随机种子（可选，通常基于当前时间）  
+            std::random_device rd;
+            std::mt19937 gen(rd());
 
-        float x = dis(gen)*speed;//左右
-        float y = dis(gen)*speed;//前后
-      //  printf("x为%f,y为%f\n", x+vec3Array[i].x, y+ vec3Array[i].z);
+            // 创建一个在[0.0, 1.0)之间的均匀分布  
+            std::uniform_real_distribution<> dis(-1.0f, 1.0f);
+
+            x_random[i] = dis(gen) * speed;//左右
+            y_random[i] = dis(gen) * speed;//前后
+
+        }
+        float x = x_random[i];
+        float y = y_random[i];
 
         if (x + vec3Array[i].x < left_border) {
             x += speed * adjust;
         }
         else if (x + vec3Array[i].x > right_border) {
 
-            x -= speed * adjust ;
+            x -= speed * adjust;
         }
         if (y + vec3Array[i].z < front_border) {
-            y+= speed * adjust ;
+            y += speed * adjust;
 
-        }else if (y + vec3Array[i].z > back_border) {
-            y-= speed * adjust;
+        }
+        else if (y + vec3Array[i].z > back_border) {
+            y -= speed * adjust;
         }
 
 
         vec3Array[i] = vec3Array[i] + glm::vec3(x, 0.0f, y);
+        vec3Angle[i]= vec3Angle[i]+ glm::vec3(0.0f,x*2,0.0f);
     }
 
 
@@ -272,11 +283,12 @@ void test::TestGameObject::OnUpdate(float deltaTime)
 
 
     int j = 0;
-    for ( auto& actor : my_Actors) {
-        actor->SetPosition(vec3Array[j++]);
+    for (auto& actor : my_Actors) {
+        actor->SetPosition(vec3Array[j]);
+        actor->SetRotation(vec3Angle[j++]);
     }
     ///************************************************************
-   
+
 }
 
 
@@ -309,23 +321,31 @@ void resolveCollision(glm::vec3& a, glm::vec3& b, float cubeSize, int gridSizeX,
 }
 
 
+
+
 void test::TestGameObject::OnRender()
 {
     GLCall(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
     GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
     
+    m_light.Render(glm::mat4(1.0f), m_projection, m_view);
 
-    m_rootObject->Render(glm::mat4(1.0f), m_projection, m_view);
+    m_rootObject->Render(glm::mat4(1.0f), m_projection, m_view, m_light.GetPosition(), m_light.GetLightColor(), m_camera.Position);
 }
 
 void test::TestGameObject::OnImGuiRender()
 {
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    ImGui::Text("Mouse Position: (%.1f, %.1f)", mouse_state.x, mouse_state.y);
+    ImGui::Text("Mouse Position ZBuffer: (%.8f)", mouse_state.z_buffer);
+    glm::vec3 temp = ScreenToModel::screenToWorld(mouse_state.x, mouse_state.y, mouse_state.z_buffer, WIDTH, HEIGHT, m_projection, m_view);
+    ImGui::Text("Point World Position: (%.1f, %.1f,  %.1f)", temp.x, temp.y, temp.z);
+
 
     ImGui::SetNextItemOpen(true, ImGuiCond_Once);
     m_camera.OnImGuiRender();
+    m_light.ImGuiRender();
     m_rootObject->ImGuiRender();
 
 
 }
-
