@@ -52,5 +52,9 @@ namespace test {
 		//演员移动步数
 		int step = 0;
 		int step_action = 5;//几步后更新演员方向，移动方向
+
+
+		float move_forward = 0.1;//前后移动
+		float move_rotate =0.1;//旋转
 	};
 }
