@@ -9,6 +9,7 @@
 
 extern GLuint WIDTH, HEIGHT;
 extern MouseState mouse_state;
+extern bool keys[1024]; // 使用的是裸数组,来自Appication.cpp  
 test::TestGameObject::~TestGameObject()
 {
     GLCall(glDisable(GL_DEPTH_TEST));
@@ -228,6 +229,7 @@ void test::TestGameObject::OnUpdate(float deltaTime)
         return;
 
     step++;
+    //my_Actors[0]->m_Selected = true;
     for (int i = 0; i < 16; i++) {
 
         //更新
@@ -260,10 +262,37 @@ void test::TestGameObject::OnUpdate(float deltaTime)
         else if (y + vec3Array[i].z > back_border) {
             y -= speed * adjust;
         }
+        //根据是否选中进行修改,未选中则静止
+        if (my_Actors[i]->m_Selected != true) {
+            vec3Array[i] = vec3Array[i] + glm::vec3(x, 0.0f, y);
+            vec3Angle[i]= vec3Angle[i]+ glm::vec3(0.0f,x*2,0.0f);
+        }
+        else {
+            // 假设vec3Angle[i]是围绕Y轴的旋转角度（以弧度为单位）  
+            glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), vec3Angle[i].y, glm::vec3(0.0f, 1.0f, 0.0f));
+
+            // 计算前向向量（这里假设是在XZ平面上移动）  
+            glm::vec3 forwardVector = glm::vec3(0.0f, 0.0f, 1.0f); // Z轴正方向  
+            forwardVector = glm::normalize(glm::vec3(rotationMatrix * glm::vec4(forwardVector, 0.0f)));
+
+            // 应用移动  
+            if (keys[265] == true) {
+                vec3Array[i] += forwardVector * move_forward;
+            }
+            else if (keys[264] == true) {
+                vec3Array[i] -= forwardVector * move_forward;
+            }
 
 
-        vec3Array[i] = vec3Array[i] + glm::vec3(x, 0.0f, y);
-        vec3Angle[i]= vec3Angle[i]+ glm::vec3(0.0f,x*2,0.0f);
+            if (keys[263] == true) {
+                vec3Angle[i] = vec3Angle[i] + glm::vec3(0.0f, move_rotate, 0.0f);
+            }else if(keys[262] == true) {
+                vec3Angle[i] = vec3Angle[i] + glm::vec3(0.0f, -1* move_rotate, 0.0f);
+            }
+
+        }
+
+       
     }
 
 
@@ -284,42 +313,14 @@ void test::TestGameObject::OnUpdate(float deltaTime)
 
     int j = 0;
     for (auto& actor : my_Actors) {
+
+  
         actor->SetPosition(vec3Array[j]);
         actor->SetRotation(vec3Angle[j++]);
     }
     ///************************************************************
 
 }
-
-
-
-void resolveCollision(glm::vec3& a, glm::vec3& b, float cubeSize, int gridSizeX, int gridSizeZ) {
-    // 假设gridSizeX和gridSizeZ是网格的大小  
-    // 这里我们假设Y轴位置不参与碰撞检测，只考虑XZ平面  
-
-    // 计算两个方块中心的距离  
-    glm::vec2 diff = glm::vec2(a.x - b.x, a.z - b.z);
-
-    // 确定移动方向（选择X轴或Z轴，这里假设优先选择X轴）  
-    bool moveX = std::abs(diff.x) > std::abs(diff.y);
-
-    // 计算移动量，这里我们简单地移动到相邻的网格位置  
-    float moveAmount = (moveX ? 1.0f : gridSizeZ) * cubeSize; // 如果是X轴，则移动一个网格宽度；如果是Z轴，则移动一行网格的宽度  
-
-    // 确定移动方向（正或负）  
-    if (diff.x < 0 && moveX || diff.y < 0 && !moveX) {
-        moveAmount = -moveAmount; // 如果需要向左或向下移动，则取负值  
-    }
-
-    // 移动方块以避免碰撞  
-    if (moveX) {
-        a.x += moveAmount; // 或者可以是b.x，取决于你希望移动哪个方块  
-    }
-    else {
-        a.z += moveAmount; // 或者可以是b.z  
-    }
-}
-
 
 
 
